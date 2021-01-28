@@ -1,7 +1,8 @@
 import React,{useState} from 'react'
-import SideMenu from "../components/SideMenu";
+import Layout from "../components/Layout";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from 'react-select';
 
 
 
@@ -9,11 +10,14 @@ const PassportInfo = () => {
   const [expiaryDate, setExpiaryDate] = useState<Date|null>();
   const [releaseDate,setReleaseDate] = useState<Date|null>();
   const [resExpiaryDate, setResExpiaryDate] = useState<Date|null>();
-
+  const options = [
+    { value: '1', label: 'الكويت' },
+    { value: '2', label: 'مصر' },
+    { value: '3', label: 'الهند' }
+  ]
   
     return (
-        <div id="layoutSidenav_content">
-        <SideMenu />
+        <Layout>
         <main className="login-bg">
         <div className="container" style={{marginBottom: '80px'}}>
           {/* Outer Row */}
@@ -62,12 +66,9 @@ const PassportInfo = () => {
                             </div>
                             <label  className="col-sm-3 col-form-label">مكان الاصدار</label>
                             <div className="col-sm-3">
-                              <select className="form-control form-control-user">
-                                <option>اختر الدولة</option>
-                                <option value="1">الكويت</option>
-                                <option value="2">مصر</option>
-                                <option value="3">الهند</option>
-                              </select>
+                               <Select options={options} 
+                               placeholder=" اختر الدولة "
+                              />
                             </div>
                           </div>
                           {/* ################### form- row-004 #################*/}
@@ -127,7 +128,8 @@ const PassportInfo = () => {
             </div>
           </div>
         </div></main>
-        </div>
+         </Layout>
+       
     )
 }
 

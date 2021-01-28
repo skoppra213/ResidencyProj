@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import SideMenu from "../components/SideMenu";
+import Layout from "../components/Layout";
 
-const PersonalInfo = ()=>{
-    return (
-        <div id="layoutSidenav_content">
-            <SideMenu />
-            <main className="login-bg">
-        <div className="container" style={{marginBottom: '80px'}}>
+
+const PersonalInfo = () => {
+  return (
+    <Layout>
+      <main className="login-bg">
+        <div className="container" style={{ marginBottom: '80px' }}>
           {/* Outer Row */}
           <div className="row justify-content-center">
             <div className="col-xl-12 col-lg-12 col-md-12">
-              <div className="card o-hidden border-1 shadow my-5 animate__animated animate__backInDown " style={{border: '1px solid rgb(189, 189, 189)'}}>
+              <div className="card o-hidden border-1 shadow my-5 animate__animated animate__backInDown " style={{ border: '1px solid rgb(189, 189, 189)' }}>
                 <div className="card-header bg-dark">
                   <div className="text-center">
-                    <h1 className=" text-gray-900 mb-1 shorooq gold" style={{fontSize: '28px'}}>معاملة تجديد اقامة - البيانات
+                    <h1 className=" text-gray-900 mb-1 shorooq gold" style={{ fontSize: '28px' }}>معاملة تجديد اقامة - البيانات
                       الشخصية</h1>
                   </div>
                 </div>
@@ -36,25 +36,25 @@ const PersonalInfo = ()=>{
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user" />
                             </div>
-                            <label  className="col-sm-3 col-form-label">رقم الهاتف</label>
+                            <label className="col-sm-3 col-form-label">رقم الهاتف</label>
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user" />
                             </div>
                           </div>
                           {/* ################### form- row-003 #################*/}
                           <div className="form-group row">
-                            <label  className="col-sm-3 col-form-label">اسم الموظف-انجليزي</label>
+                            <label className="col-sm-3 col-form-label">اسم الموظف-انجليزي</label>
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user" />
                             </div>
-                            <label  className="col-sm-3 col-form-label">تاريخ الميلاد</label>
+                            <label className="col-sm-3 col-form-label">تاريخ الميلاد</label>
                             <div className="col-sm-3">
                               <input type="date" className="form-control form-control-user" />
                             </div>
                           </div>
                           {/* ################### form- row-004 #################*/}
                           <div className="form-group row">
-                            <label  className="col-sm-3 col-form-label">الادارة/القسم</label>
+                            <label className="col-sm-3 col-form-label">الادارة/القسم</label>
                             <div className="col-sm-3">
                               <select className="form-control form-control-user">
                                 <option>اختر الادارة</option>
@@ -62,7 +62,7 @@ const PersonalInfo = ()=>{
                                 <option value="2">الشئون الادارية</option>
                               </select>
                             </div>
-                            <label  className="col-sm-3 col-form-label">المسمى الوظيفي</label>
+                            <label className="col-sm-3 col-form-label">المسمى الوظيفي</label>
                             <div className="col-sm-3">
                               <select className="form-control form-control-user">
                                 <option>اختر المسمى الوظيفي</option>
@@ -73,17 +73,17 @@ const PersonalInfo = ()=>{
                           </div>
                           {/* ################### form- row-005 #################*/}
                           <div className="form-group row">
-                            <label  className="col-sm-3 col-form-label">تاريخ التعيين</label>
+                            <label className="col-sm-3 col-form-label">تاريخ التعيين</label>
                             <div className="col-sm-3">
                               <input type="date" className="form-control form-control-user" />
                             </div>
                           </div>
                           {/* ################### form- row-006 #################*/}
                           {/* ################# submit btn ##################### */}
-                          <div className="row justify-content-between"> <a href="001.html" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
-                              السابق
+                          <div className="row justify-content-between"> <a href="001.html" className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
+                            السابق
                             </a>
-                            <a href="001-002.html" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
+                            <a href="001-002.html" className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
                               التالي
                             </a>
                           </div>
@@ -97,7 +97,7 @@ const PersonalInfo = ()=>{
             </div>
           </div>
         </div></main>
-        </div>
-    );
+    </Layout>
+  );
 }
 export default PersonalInfo;
