@@ -1,8 +1,8 @@
-export function assignToType<T extends object>(arg: T , res :any): T {
-    Object.keys(res).forEach((key:string)=>{
-         if (arg.hasOwnProperty(key)){        
-            arg[key as keyof T] = res[key];          
-         }   
-        })
-    return arg;
-  }
+export function assignToType<T extends object>(obj: any, target: T): T {
+  Object.keys(obj).forEach((key: string) => {
+    if (target.hasOwnProperty(key)) {
+      target[key as keyof T] = obj[key];
+    }
+  });
+  return target;
+}

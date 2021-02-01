@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./App.css";
 import Nav from "./views/Nav";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
@@ -10,28 +10,40 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./views/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import NewRequest from "./views/NewRequest";
+import SideMenu from "./components/SideMenu";
+import Layout from "./components/Layout";
+import UserContext from "./context/AppContext";
+import { userInfo } from "./types/userInfo";
 
 
 function App() {
 
+	const [user, setUser] = useState(userInfo)
+
 
 	return (
-		<Router>
+		<UserContext.Provider value={{user, setUser}}>
+			<Router>
 				<Header />
-			<div id="layoutSidenav">
-			
-				<Switch>
-					<ProtectedRoute exact path="/" component={Home} />
-					<Route exact path="/login" component={Login} />
-					<Route exact path="/personalInfo" component={PersonalInfo} />
-					<Route exact path="/passportInfo" component={PassportInfo} />
-					<Route exact path="/notfound" component={NotFound} />
-					<Redirect to="/notfound" />
-				</Switch>
+				<div id="layoutSidenav">
+					<Layout >
+						<Switch>
 
-				<Footer />
-			</div>
-		</Router>
+							<ProtectedRoute exact path="/" component={Home} />
+							<Route exact path="/login" component={Login} />
+							<ProtectedRoute exact path="/personalInfo" component={PersonalInfo} />
+							<ProtectedRoute exact path="/passportInfo" component={PassportInfo} />
+							<ProtectedRoute exact path="/newrequest" component={NewRequest} />
+							<Route exact path="/notfound" component={NotFound} />
+							<Redirect to="/notfound" />
+
+						</Switch>
+					</Layout>
+					<Footer />
+				</div>
+			</Router>
+		</UserContext.Provider>
 	);
 }
 

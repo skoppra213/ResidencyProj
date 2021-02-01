@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
 
 import auth from "../auth/auth";
+import UserContext from "../context/AppContext";
 
 const ProtectedRoute: React.ComponentType<any> = ({component:Component, ...rest}) => {
+
+	const {user} = useContext(UserContext);
 
 	return (
 		<Route
 			{...rest}
 			render={(props) => {
-				console.log("render props", props);
-
-				if (auth.isAuthenticated()) {
-					console.log(" auth.isAuthenticated()", auth.isAuthenticated());
+				if (user.isLoggedIn) {
 					return <Component {...props} />;
 				} else {
 					return (<Redirect

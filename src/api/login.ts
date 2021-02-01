@@ -1,17 +1,31 @@
+import ErrorInfo from "../types/errorInfo";
+import { API_AUTHENTICATE } from "./Urls";
+
+
 export const login = async (username: string, password: string): Promise<any> => {
 
-  let result = await  fetch("http://localhost:25004/Jwt/authenticate", {
+  let result = await fetch(API_AUTHENTICATE, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      "username": username,
-      "password": password
+      username,
+      password
     })
-  })
-  
-  return await result.json()
+  });
+
+  if (result.ok)
+  {
+    return await result.json();
+  }
+  else{
+    let err :ErrorInfo  = (await  result.json());
+    return {
+      status: 0,
+      message: err.message
+    }
+  }
 
 };
 
