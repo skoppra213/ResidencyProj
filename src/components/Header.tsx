@@ -1,12 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import UserContext from "../context/AppContext";
+import { authenticateResponse } from '../types/userInfo';
+import { getLocalStorage } from '../utils/localStorageHelper';
 
 
 const Header = () => {
 
-  const {user,setUser} = useContext(UserContext);
-  console.log("Header ~ user", user);
+  const userAuth = getLocalStorage("user", authenticateResponse);
+
+
+  
+
+
+
+  const logout = () => {
+    localStorage.removeItem("user");
+  }
+
 
   return (
     <>
@@ -21,15 +31,16 @@ const Header = () => {
         {/*#######################################*/}
         <div className="d-none d-md-inline-block">
           <ul className="navbar-nav ml-auto ml-md-0">
-            {user.isLoggedIn ?
+            {userAuth.isLoggedIn ?
               <li className="nav-item dropdown"> <a className="top-nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="fas fa-user fa-fw" />&nbsp;&nbsp; ملف المستخدم
               &nbsp;&nbsp;</a>
-                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"> <a className="dropdown-item sb-nav-link-icon" href="#">
-                  <i className="fas fa-angle-double-left" />&nbsp;&nbsp; الملف الشخصي
-              </a>
-                  <a className="dropdown-item sb-nav-link-icon" href="#">
+                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                  <button className="dropdown-item sb-nav-link-icon">
+                    <i className="fas fa-angle-double-left" />&nbsp;&nbsp; الملف الشخصي
+                  </button>
+                  <Link to="/login" className="dropdown-item sb-nav-link-icon" onClick={logout} >
                     <i className="fas fa-angle-double-left" />&nbsp;&nbsp; تسجيل الخروج
-              </a>
+                  </Link>
                   <div className="dropdown-divider " />
                 </div>
               </li> : <li className="nav-item"><Link to="/login" className="top-nav-link">تسجيل الدخول</Link></li>}

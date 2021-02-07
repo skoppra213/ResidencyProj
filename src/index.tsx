@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import './assets/css/style.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import './assets/fonts/webfonts.css';
-import './assets/js/all'
+
  
 
 ReactDOM.render(

@@ -1,18 +1,31 @@
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import SideMenu from "./SideMenu";
 import AuthHeader from "./AuthHeader";
-import UserContext from "../context/AppContext";
-
+import Header from './Header';
+import { getLocalStorage } from '../utils/localStorageHelper';
+import { authenticateResponse } from '../types/userInfo';
+import '../assets/js/all'
 
 const Layout: FC = ({ children }) => {
-    // const user = useContext(UserInfoContext);
+
+    const userAuth = getLocalStorage("user", authenticateResponse);
 
     return (
-        <div id="layoutSidenav_content">
-            <SideMenu />
-            {true && <AuthHeader />}
-            {children}
-        </div>
+        <>
+         <Header />
+            <div id="layoutSidenav">
+                <SideMenu />
+                <div id="layoutSidenav_content">
+       
+          
+                    {userAuth.isLoggedIn && 
+                    <AuthHeader loggedIn={userAuth.isLoggedIn} 
+                    fullName={ userAuth.response.userInfo.employeeName}
+                    civilId = {userAuth.response.userInfo.civilId} />}
+                    {children}
+                </div>
+            </div>
+        </>
     )
 }
 

@@ -1,20 +1,22 @@
-import React, { useContext } from "react";
-import { Redirect, Route, RouteProps } from "react-router-dom";
+import React from "react";
+import { Redirect, Route } from "react-router-dom";
 
-import auth from "../auth/auth";
-import UserContext from "../context/AppContext";
+import { getLocalStorage } from "../utils/localStorageHelper";
+import { authenticateResponse } from "../types/userInfo";
 
-const ProtectedRoute: React.ComponentType<any> = ({component:Component, ...rest}) => {
-
-	const {user} = useContext(UserContext);
+const ProtectedRoute: React.ComponentType<any> = ({ component: Component, ...rest }) => {
+	
+	const userAuth = getLocalStorage("user", authenticateResponse);
 
 	return (
 		<Route
 			{...rest}
 			render={(props) => {
-				if (user.isLoggedIn) {
+				console.log("props", props);
+				if (userAuth.isLoggedIn) {
 					return <Component {...props} />;
-				} else {
+				}
+				else {
 					return (<Redirect
 						to={{
 							pathname: "/login",
