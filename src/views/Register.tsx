@@ -1,12 +1,13 @@
 import React,{useState} from 'react'
 import Layout from "../components/Layout";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select';
 
+import Select from 'react-select';
+import Switch from "react-switch";
 
 
 const Register = () => {
+
+  const [moaIqama, setmoaIqama] = useState(true)
     return (
       <Layout>
         <main className="login-bg">
@@ -91,7 +92,8 @@ const Register = () => {
                             <label htmlFor="" className="col-sm-2 col-form-label">إقامة وزارة</label>
                             <div className="col-sm-4">
                               <div className="custom-control custom-checkbox  mt-1">
-                                <input type="checkbox" defaultChecked data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-size="sm" />
+                                {/* <input type="checkbox" defaultChecked data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-size="sm" /> */}
+                                <Switch onChange={()=> setmoaIqama(val=>!val)} checked={moaIqama} />
                               </div>
                             </div>
                           </div>

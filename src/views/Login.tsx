@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import { login } from "../api/login";
 import { authenticateResponse, AuthenticateResponse, UserInfo, userInfo } from "../types/userInfo";
 import { useHistory } from "react-router-dom";
-import { assignToType } from "../utils/assignToType";
+import { assignToType } from "../utils/assignType";
 import ErrorInfo from "../types/errorInfo";
 import UserContext from "../context/AppContext";
 import FullPageLoader from "../components/FullPageLoader";
@@ -55,12 +55,17 @@ const Login = () => {
 			loginRes.isLoggedIn = true;
 			localStorage.setItem("user", JSON.stringify(loginRes));
 			setLoading(false);
-		//	history.push("/personalInfo");
 		}
 		else if(loginRes.hasError && loginRes.status < 500 && loginRes.status > 299) {
 			setWrongCredintials(true);
 			setLoading(false);
 		}
+	}
+
+	const handleNewUser = (e:SyntheticEvent)=>
+	{
+		e.preventDefault();
+		history.push("/register");
 	}
 	return (
 		<Layout>
@@ -108,7 +113,7 @@ const Login = () => {
 													</div>
 													<div className="row justify-content-between">
 														<button className="btn btn-primary btn-user  shorooq " style={{ fontSize: '22px' }}> تسجيل الدخول الى النظام  </button>
-														<button className="btn btn-info btn-user shorooq " style={{ fontSize: '22px' }}> تسجيل مستخدم جديد </button>
+														<button  className="btn btn-info btn-user shorooq " style={{ fontSize: '22px' }} onClick={handleNewUser}> تسجيل مستخدم جديد </button>
 													</div>
 												</form>
 											</div>

@@ -5,13 +5,13 @@ import Home from "./views/Home";
 import Login from "./views/Login";
 import PersonalInfo from "./views/PersonalInfo";
 import PassportInfo from "./views/PassportInfo";
-import Register from "./views/Register"
+import Register from "./views/Register";
+import Register2 from "./views/Register2";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./views/NotFound";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NewRequest from "./views/NewRequest";
-import Layout from "./components/Layout";
+import HookForm from "./views/HookForm";
 
 
 function App() {
@@ -24,6 +24,8 @@ function App() {
 						<ProtectedRoute exact path="/" component={Home} />
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/register" component={Register} />
+						<Route exact path="/register2" component={Register2} />
+						<Route exact path="/hookForm" component={HookForm} />
 						<ProtectedRoute exact path="/personalInfo" component={PersonalInfo} />
 						<ProtectedRoute exact path="/passportInfo" component={PassportInfo} />
 						<ProtectedRoute exact path="/newRequest" component={NewRequest} />

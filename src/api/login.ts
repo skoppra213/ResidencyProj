@@ -29,26 +29,9 @@ export const login = async (username: string, password: string): Promise<any> =>
     return { ...authenticateResponse, status: 500, message: e, hasError: true }
   }
 
-  // if (response.ok) {
-  //   let res = await response.json();
-  //   localStorage.setItem("user", JSON.stringify(res));
-  //   return res;
-  // }
-  // else {
-  //   let err: ErrorInfo = (await response.json());
-  //   return {
-  //     status: 0,
-  //     message: err.message
-  //   }
-  // }
 
 
 
 };
 
 
-// export const login = async () =>{
-//  let res = await fetch("http://localhost:25004/api/GeneralSettings");
-//  let result = await res.json();
-//  console.log("result",result);
-// }

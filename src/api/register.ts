@@ -1,0 +1,19 @@
+import { API_NonSapRegister } from "./Urls";
+import {RegisterRequest} from "../types/registerRequest"
+
+export const RegisterNonSapUser = async(registerInfo:RegisterRequest)=>
+{
+
+    let response = await fetch(API_NonSapRegister, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ...registerInfo
+           })
+      });
+    let res = await response.json()
+      console.log("res",res);
+     return await response.json();
+}
