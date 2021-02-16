@@ -1,5 +1,5 @@
-export type SelectOptions = {
-    value:string,
-    label:string
+export class SelectOptions  {
+    value:string ="";
+    label:string = ""
   };
   

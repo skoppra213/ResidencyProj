@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import Layout from "../components/Layout";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
@@ -17,16 +17,34 @@ const Register2 = () => {
   const [moaIqama, setmoaIqama] = useState(true);
   const [nationalities, setnationalitiesOption] = useState<SelectOptions[]>();
   const [userTypes, setuserTypesOption] = useState<SelectOptions[]>();
-
+  
 
   const { register, handleSubmit, watch, errors,control } = useForm<RegisterRequestModel>();
+  console.log("errors", errors);
+
+  const password = useRef({});
+  password.current = watch("password", "");
+
+   function assignModelToType(modelSource:RegisterRequestModel,target: RegisterRequest) :RegisterRequest {
+    Object.keys(modelSource).forEach((key: string) => {
+      if (target.hasOwnProperty(key)) {
+        if ((modelSource[key as keyof RegisterRequestModel] as SelectOptions).value ){
+          target[key as keyof RegisterRequest] = (modelSource[key as keyof RegisterRequestModel] as SelectOptions).value; 
+        }
+        // else
+        // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel];
+        // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel]
+        // // if(typeof key ==="string")
+        // // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel];
+      }
+    });
+    return target;
+   }
+
   const onSubmit = (data:FormData) => {
-   let temp = new RegisterRequestModel();
-    console.log("data",data);
-    let obj = {...data};
-    console.log("obj",obj);
     
-    temp = assignToType(obj,temp);
+    let temp = new RegisterRequestModel();
+    temp = assignToType(data,temp);
     
     let arg = new RegisterRequest();
     arg.email = temp.email;
@@ -35,19 +53,15 @@ const Register2 = () => {
     arg.employeeName= temp.employeeName;
     arg.nationalityId = temp.nationalityId?.value;
     arg.jobTitle = temp.jobTitle;
-    arg.userTypeId = temp.userTypeId;
-    arg.employeeType=temp.employeeType?.value.toString();//TODO
+    arg.userTypeId = temp.userTypeId?.value;
+    arg.employeeType="temp Data";//TODO
     arg.organization=temp.organization;
     arg.mobileNumber = temp.mobileNumber;
     arg.employeeNumber= temp.employeeNumber;
-    
-    //arg.birthDate  = temp.birthDate;
-    //  arg.hireDate
+
     console.log("arg",arg);
-    RegisterNonSapUser(arg);
-
-   
-
+    assignModelToType(temp,arg);
+    // RegisterNonSapUser(arg);
   }
 
 //intial fetch for dropdown
@@ -88,7 +102,12 @@ const Register2 = () => {
                         <div className="form-group row">
                           <label htmlFor="civilId" className="col-sm-2 col-form-label">الرقم المدني</label>
                           <div className="col-sm-4">
-                            <input type="text" name="civilId" className="form-control form-control-user" ref={register({ required: true})} />
+                            <input type="text" name="civilId" className="form-control form-control-user"
+                             ref={register({ required: true,minLength:12,maxLength:12})} />
+                            {errors?.civilId?.type==="required" && <span className="text-danger">CivilId is required</span>  }
+                            {(errors?.civilId?.type==="minLength" || errors?.civilId?.type==="maxLength")  && 
+                             <span  className="text-danger">Length must be 12 </span>  }
+                            
                           </div>
                           <label htmlFor="" className="col-sm-2 col-form-label">الرقم المسلسل</label>
                           <div className="col-sm-4">
@@ -141,7 +160,7 @@ const Register2 = () => {
                           <div className="col-sm-4">
      
                               <Controller
-                                name="employeeType"
+                                name="userTypeId"
                                 control={control}
                                 placeholder="  Select UserType "
                                 options={userTypes}
@@ -152,7 +171,18 @@ const Register2 = () => {
                           <div className="col-sm-4">
                             {/* <div className="custom-control custom-checkbox  mt-1"> */}
                               {/* <input type="checkbox" defaultChecked data-toggle="toggle" data-on="<i class='fa fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-size="sm" /> */}
-                              <Switch onChange={()=> setmoaIqama(val=>!val)} checked={moaIqama} />
+                              {/* <Switch onChange={()=> setmoaIqama(val=>!val)} checked={moaIqama} /> */}
+                              <Controller
+                                name="isMOA"
+                                control={control}
+                                defaultValue={true}
+                                render={({ onChange, value }) => (
+                                  <Switch
+                                    onChange={onChange}
+                                    checked={value}
+                                    />
+                                  )}
+                              />
                             {/* </div> */}
                           </div>
                         
@@ -162,51 +192,29 @@ const Register2 = () => {
                         <div className="form-group row">
                           <label htmlFor="password" className="col-sm-2 col-form-label">كلمة المرور</label>
                           <div className="col-sm-4">
-                            <input name="password" type="password" className="form-control form-control-user" ref={register} />
+                            <input name="password" type="password" className="form-control form-control-user" 
+                             ref={register({
+                              required: "You must specify a password",
+                              minLength: {
+                                value: 8,
+                                message: "Password must have at least 8 characters"
+                              }
+                            })} />
+                             {errors.password && <span  className="text-danger">{errors.password.message}</span>}
                           </div>
-                          <label htmlFor="password1" className="col-sm-2 col-form-label">تأكيد كلمة المرور</label>
+                          <label htmlFor="password_repeat" className="col-sm-2 col-form-label">تأكيد كلمة المرور</label>
                           <div className="col-sm-4">
-                            <input  type="password" className="form-control form-control-user" />
+                            <input  type="password" name="password_repeat" className="form-control form-control-user" 
+                            ref={register({
+                              validate: value =>
+                                value === password.current || "The passwords do not match"
+                            })}/>
+                             {errors.password_repeat && <span  className="text-danger">{errors.password_repeat.message}</span>}
+
                           </div>
                         </div>
 
-                        <div className="form-group row">
-                          <label htmlFor="birthDate" className="col-sm-2 col-form-label">BirthDate</label>
-                          <div className="col-sm-4">
-                            {/* <input name="birthDate" type="text" className="form-control form-control-user" ref={register} /> */}
-                         
-                              <Controller
-                                  control={control}
-                                  name="birthDate"
-                                  render={({ onChange, onBlur, value }) => (
-                                    <ReactDatePicker
-                                      onChange={onChange}
-                                      onBlur={onBlur}
-                                      selected={value}
-                                      dateFormat="dd/MM/yyyy"
-                                      placeholderText="dd/MM/yyyy "   
-                                    />
-                                  )}
-                                />
-
-                          </div>
-                          <label htmlFor="hireDate" className="col-sm-2 col-form-label">hireDate</label>
-                          <div className="col-sm-4">
-                          <Controller
-                                  control={control}
-                                  name="hireDate"
-                                  render={({ onChange, onBlur, value }) => (
-                                    <ReactDatePicker
-                                      onChange={onChange}
-                                      onBlur={onBlur}
-                                      selected={value}
-                                      dateFormat="dd/MM/yyyy"
-                                      placeholderText="dd/MM/yyyy "   
-                                    />
-                                  )}
-                                />
-                          </div>
-                        </div>
+                   
                         <hr />
                         {/* ################# submit btn ##################### */}
                         <div className="row justify-content-center"> 

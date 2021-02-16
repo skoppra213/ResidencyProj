@@ -6,27 +6,27 @@ export class RegisterRequest {
     employeeName: string = "";
     nationalityId?: string = "";
     jobTitle: string = "";
-    userTypeId: number = 0;
+    userTypeId?: string = "";
     employeeType?: string = "";
     organization: string = "";
     mobileNumber: string = "";
     employeeNumber: string = "";
-    birthDate?: Date;
-    hireDate?: Date;
+
 }
 
 export class RegisterRequestModel {
     email: string = "";
     password: string = "";
+    password_repeat: string = "";
     civilId: string = "";
     employeeName: string = "";
-    nationalityId?: SelectOptions|undefined;
+    nationalityId?: SelectOptions|undefined = new SelectOptions();
     jobTitle: string = "";
-    userTypeId: number = 0;
-    employeeType?: SelectOptions|undefined;
+    userTypeId?:SelectOptions|undefined;
+    employeeType?: string = "";
     organization: string = "";
     mobileNumber: string = "";
     employeeNumber: string = "";
-    birthDate?: Date;
-    hireDate?: Date;
+    isMOA?: boolean=false;
+
 }

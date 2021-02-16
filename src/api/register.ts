@@ -3,7 +3,7 @@ import {RegisterRequest} from "../types/registerRequest"
 
 export const RegisterNonSapUser = async(registerInfo:RegisterRequest)=>
 {
-
+  console.log("IN RegisterNonSapUser" );
     let response = await fetch(API_NonSapRegister, {
         method: 'POST',
         headers: {
@@ -15,5 +15,5 @@ export const RegisterNonSapUser = async(registerInfo:RegisterRequest)=>
       });
     let res = await response.json()
       console.log("res",res);
-     return await response.json();
+     return res;
 }
