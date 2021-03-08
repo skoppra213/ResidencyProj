@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { authenticateResponse } from '../types/userInfo';
-import { getLocalStorage } from '../utils/localStorageHelper';
+import { authenticateResponse } from '../../types/userInfo';
+import { getLocalStorage } from '../../Services/utils/localStorageHelper';
+
 
 
 const Header = () => {

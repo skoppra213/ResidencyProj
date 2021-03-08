@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import './assets/css/style.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import './assets/fonts/webfonts.css';
-
+import { Provider } from 'react-redux';
+import configureStore from './State/store';
  
-
+const store = configureStore();
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <>
+     <Provider store={store}>
+     <App />
+    </Provider>
+  </>,
   document.getElementById('root')
 );
 

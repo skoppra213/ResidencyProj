@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import auth from "../auth/auth";
-import UserContext from "../context/AppContext";
+ import auth from "../../auth/auth";
+
 
 
 const Home = () => {

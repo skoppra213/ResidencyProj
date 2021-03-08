@@ -1,8 +1,9 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
-import { getLocalStorage } from "../utils/localStorageHelper";
-import { authenticateResponse } from "../types/userInfo";
+import { getLocalStorage } from "../../Services/utils/localStorageHelper"
+
+import { authenticateResponse } from "../../types/userInfo";
 
 const ProtectedRoute: React.ComponentType<any> = ({ component: Component, ...rest }) => {
 	

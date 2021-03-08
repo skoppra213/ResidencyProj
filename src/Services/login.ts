@@ -3,7 +3,7 @@ import { API_AUTHENTICATE } from "./Urls";
 
 
 export const login = async (username: string, password: string): Promise<any> => {
-
+  console.log("in login api");
   try {
     let response = await fetch(API_AUTHENTICATE, {
       method: 'POST',
@@ -16,12 +16,10 @@ export const login = async (username: string, password: string): Promise<any> =>
       })
     });
     if (!response.ok) {
-      console.log("res NOT ok");
       return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
     }
-
-    console.log("res OK");
-    return await response.json();
+    let res = await response.json();
+    return res;
 
   } catch (e) {
     console.log("NET error");

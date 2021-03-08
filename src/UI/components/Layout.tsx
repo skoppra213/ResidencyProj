@@ -2,9 +2,11 @@ import React, { FC } from 'react'
 import SideMenu from "./SideMenu";
 import AuthHeader from "./AuthHeader";
 import Header from './Header';
-import { getLocalStorage } from '../utils/localStorageHelper';
-import { authenticateResponse } from '../types/userInfo';
-import '../assets/js/all'
+import { getLocalStorage } from '../../Services/utils/localStorageHelper';
+
+import { authenticateResponse } from '../../types/userInfo';
+import '../../assets/js/all';
+
 
 const Layout: FC = ({ children }) => {
 

@@ -13,7 +13,6 @@ export const RegisterNonSapUser = async(registerInfo:RegisterRequest)=>
             ...registerInfo
            })
       });
-    let res = await response.json()
-      console.log("res",res);
+     let res = await response.json()
      return res;
 }

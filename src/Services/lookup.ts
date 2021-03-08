@@ -1,6 +1,7 @@
-import {GET_NATIONALITIES,GET_USERTYPES } from "./Urls";
-import {assignToTypeArray} from "../utils/assignType";
-import {Nationality,UserType} from "../types/lookUpTypes";
+import {GET_NATIONALITIES,GET_USERTYPES,GET_APPTYPES } from "./Urls";
+import {assignToTypeArray} from "./utils/assignType";
+import {Nationality,UserType,AppType} from "../types/lookUpTypes";
+import {SelectOptions} from "../types/UIRelated"
 
 export const getNationalities = async ():Promise<Nationality[]> =>{
     let response = await fetch(GET_NATIONALITIES, { 
@@ -24,4 +25,15 @@ export const getUserTypes = async ():Promise<UserType[]> =>{
       let userTypes = new Array<UserType>();
       userTypes = assignToTypeArray<UserType>(data, new UserType(),userTypes);
       return userTypes;
+}
+
+export const getAppTypes = async ():Promise<SelectOptions[]> =>{
+  let response = await fetch(GET_APPTYPES, { 
+      headers: {
+        'Content-Type': 'application/json'
+      }      
+    });
+    let res:SelectOptions[] = await response.json();     
+    console.log("res in appTypes fetch",res);
+    return res;
 }

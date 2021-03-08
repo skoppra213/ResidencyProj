@@ -20,12 +20,13 @@ const SideMenu = () => {
                 </span>
                 <span>الصفحة الرئيسية</span>
               </a>
-              <a className="nav-link" href="001.html">
+          
+              <NavLink activeClassName="active" className="nav-link" to="/newApp">
                 <span className="sb-nav-link-icon">
                   <i className="fas fa-angle-double-left" />&nbsp;&nbsp;
                 </span>
                 <span>معاملة جديدة</span>
-              </a>
+              </NavLink>
               <NavLink activeClassName="active" className="nav-link" to="/personalInfo">
                 <span className="sb-nav-link-icon">
                   <i className="fas fa-angle-double-left" />&nbsp;&nbsp;

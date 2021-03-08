@@ -1,4 +1,5 @@
-import {SelectOptions} from "../types/UIRelated";
+import {SelectOptions} from "../../types/UIRelated";
+
  
 export function assignToType<T extends object>(obj: any, target: T): T {
   Object.keys(obj).forEach((key: string) => {

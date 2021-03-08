@@ -1,28 +1,29 @@
 import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
-import { login } from "../api/login";
-import { authenticateResponse, AuthenticateResponse, UserInfo, userInfo } from "../types/userInfo";
+import { login } from "../../Services/login";
+import { authenticateResponse, AuthenticateResponse, UserInfo, userInfo } from "../../types/userInfo";
 import { useHistory } from "react-router-dom";
-import { assignToType } from "../utils/assignType";
-import ErrorInfo from "../types/errorInfo";
-import UserContext from "../context/AppContext";
-import FullPageLoader from "../components/FullPageLoader";
-import Header from "../components/Header";
-import { Redirect } from "react-router-dom";
-import { getLocalStorage } from "../utils/localStorageHelper";
-import Layout from "../components/Layout";
 
+import FullPageLoader from "../components/FullPageLoader";
+import { Redirect } from "react-router-dom";
+import { getLocalStorage } from "../../Services/utils/localStorageHelper";
+import Layout from "../components/Layout";
+import { useSelector, useDispatch } from 'react-redux';
+import {RootState} from '../../State/rootReducer';
+import {getloginRequest} from "../../State/login"
 
 const Login = () => {
 	let userAuth = getLocalStorage("user", authenticateResponse);
 	const history = useHistory();
+	let dispatch = useDispatch();
+	const loginstate = useSelector<RootState,RootState["login"]>(state => state.login);
 
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
-	const [loading, setLoading] = useState<boolean>(false);
+
+	const {isLoading} = loginstate;
 	const [isFieldEmpty, setIsFieldEmpty] = useState(false);
 	const [wrongCredintials, setWrongCredintials] = useState(false);
 
-	console.log("login render");
 
 
 	useEffect(() => {
@@ -34,13 +35,11 @@ const Login = () => {
 
 	const handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
-
-		setIsFieldEmpty(false);
-		setWrongCredintials(false);
+		dispatch(getloginRequest({username,password}));
+		
 		
 
-
-		if (username.trim() === "" || password.trim() === "") {
+		/*if (username.trim() === "" || password.trim() === "") {
 			setIsFieldEmpty(true);
 
 			return;
@@ -59,7 +58,7 @@ const Login = () => {
 		else if(loginRes.hasError && loginRes.status < 500 && loginRes.status > 299) {
 			setWrongCredintials(true);
 			setLoading(false);
-		}
+		}*/
 	}
 
 	const handleNewUser = (e:SyntheticEvent)=>
@@ -69,7 +68,7 @@ const Login = () => {
 	}
 	return (
 		<Layout>
-			{ loading && <FullPageLoader />}
+			{ isLoading && <FullPageLoader />}
 			{!userAuth.isLoggedIn &&
 				<main className="login-bg">
 					<div className="container" style={{ marginBottom: '80px' }}>
@@ -79,7 +78,7 @@ const Login = () => {
 								<div className="card o-hidden border-1 shadow my-5 animate__animated animate__backInDown " style={{ border: '1px solid rgb(189, 189, 189)' }}>
 									<div className="card-header bg-dark">
 										<div className="text-center">
-											{loading && <h3 className="text-danger">Loading...</h3>}
+											{isLoading && <h3 className="text-danger">Loading...</h3>}
 											<h1 className=" text-gray-900 mb-1 shorooq gold" style={{ fontSize: '28px' }}>تسجيل دخول لخدمات
                             البوابة الالكترونية</h1>
 										</div>

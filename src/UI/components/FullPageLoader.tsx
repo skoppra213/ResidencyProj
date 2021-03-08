@@ -1,5 +1,6 @@
 import React from 'react';
-import imgLoader from '../assets/img/colorfulLoader.gif'
+import imgLoader from '../../assets/img/colorfulLoader.gif';
+
 
 const FullPageLoader = () => {
     return (

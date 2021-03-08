@@ -1,47 +1,42 @@
 import React,{useState,useEffect,useRef} from 'react'
 import Layout from "../components/Layout";
 import { useForm, Controller } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import Select from 'react-select';
 import Switch from "react-switch";
-import {RegisterRequest,RegisterRequestModel} from "../types/registerRequest";
-import ReactDatePicker from "react-datepicker";
-import {getNationalities,getUserTypes} from "../api/lookup";
-import {assignToSelectType, assignToType} from "../utils/assignType";
-import {SelectOptions} from "../types/UIRelated";
-import {RegisterNonSapUser}from "../api/register";
+import {RegisterRequest,RegisterRequestModel} from "../../types/registerRequest";
+import {getNationalities,getUserTypes} from "../../Services/lookup";
+import {assignToSelectType, assignToType} from "../../Services/utils/assignType";
+import ModalInfo, {PropsModal} from '../components/ModalInfo';
+import {SelectOptions} from "../../types/UIRelated";
+import {RegisterNonSapUser}from "../../Services/register";
+import {Response } from "../../types/response";
 
 
 
 const Register2 = () => {
+  const history = useHistory(); 
+
 
   const [moaIqama, setmoaIqama] = useState(true);
   const [nationalities, setnationalitiesOption] = useState<SelectOptions[]>();
   const [userTypes, setuserTypesOption] = useState<SelectOptions[]>();
-  
+  const [show, setShow] = useState(false);
+  const [propsModal, setpropsModal] = useState<PropsModal>({
+    handleClose: () => {setShow(false); history.push("/login");},
+    show: show,
+    modalBody: '',
+    modalTitle: ''
+  });
+
 
   const { register, handleSubmit, watch, errors,control } = useForm<RegisterRequestModel>();
-  console.log("errors", errors);
-
   const password = useRef({});
   password.current = watch("password", "");
 
-   function assignModelToType(modelSource:RegisterRequestModel,target: RegisterRequest) :RegisterRequest {
-    Object.keys(modelSource).forEach((key: string) => {
-      if (target.hasOwnProperty(key)) {
-        if ((modelSource[key as keyof RegisterRequestModel] as SelectOptions).value ){
-          target[key as keyof RegisterRequest] = (modelSource[key as keyof RegisterRequestModel] as SelectOptions).value; 
-        }
-        // else
-        // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel];
-        // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel]
-        // // if(typeof key ==="string")
-        // // target[key as keyof RegisterRequest] = modelSource[key as keyof RegisterRequestModel];
-      }
-    });
-    return target;
-   }
 
-  const onSubmit = (data:FormData) => {
+
+  const onSubmit = async (data:FormData) => {
     
     let temp = new RegisterRequestModel();
     temp = assignToType(data,temp);
@@ -59,9 +54,19 @@ const Register2 = () => {
     arg.mobileNumber = temp.mobileNumber;
     arg.employeeNumber= temp.employeeNumber;
 
-    console.log("arg",arg);
-    assignModelToType(temp,arg);
-    // RegisterNonSapUser(arg);
+
+    let a:Response= await RegisterNonSapUser(arg);
+
+    if (a.status ){
+      console.log("in modal");
+      let tempModal = {...propsModal}
+      tempModal.show = true;
+      tempModal.modalBody=a.message;
+      tempModal.modalTitle="Info"
+      setpropsModal({...tempModal});
+
+    }
+
   }
 
 //intial fetch for dropdown
@@ -81,7 +86,9 @@ const Register2 = () => {
   }, []);
   return (
     <Layout>
+
       <main className="login-bg">
+
       <div className="container" style={{marginBottom: '80px'}}>
         {/* Outer Row */}
         <div className="row justify-content-center">
@@ -232,6 +239,15 @@ const Register2 = () => {
           </div>
         </div>
       </div></main>
+
+    {/*Success Modal */}
+      <ModalInfo show={propsModal.show}
+         handleClose={propsModal.handleClose} 
+         modalBody={propsModal.modalBody}
+         modalTitle = {propsModal.modalTitle}
+        />
+
+
    </Layout>
   );
 }
