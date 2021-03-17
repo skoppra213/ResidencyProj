@@ -1,28 +1,25 @@
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import * as actionTypes from "./types";
-import {getFetchIncompleteRequest,getFetchIncompleteSuccess} from "./action";
-// import {getAppTypes} from "../../Services/lookup"
+import * as actions  from "./action";
+import {createNewApp} from "../../Services/newApp";
 
 
-
-
-function* onNewAppRequest() {
-
+  function* onNewAppRequest({ type, payload  }: actionTypes.CreateRequestActionType) {
     try {
-        yield "a"
-        // const appTypes:SelectOptions[]  = yield call(getAppTypes);
-        // console.log("appTypes",appTypes);
-        // yield put(getAppTypesSuccess(appTypes));
+          console.log("b4 yield payload",payload);
+          let res:actionTypes.INewAppState= yield call(createNewApp,payload);
+          console.log("after yield",res);
+          yield put(actions.getCreateSuccess(res));
     } catch (error) {
 
     }
   }
 
 
-function* watchOnLookUps() {
-    // yield takeEvery(actionTypes.AppTypes_request, onAppTypesRequest);
+function* watchOnNewApp() {
+    yield takeEvery(actionTypes.CreateRequest, onNewAppRequest);
   }
 
-  export default function* lookUpSaga() {
-    yield all([fork(watchOnLookUps)]);
+  export default function* newAppSaga() {
+    yield all([fork(watchOnNewApp)]);
   }
