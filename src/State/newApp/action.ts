@@ -1,6 +1,6 @@
 import * as NewAppTypes from "./types"
 
-export const getCreateRequest = (data:NewAppTypes.IFormInput):NewAppTypes.CreateRequestActionType=>{
+export const getCreateRequest = (data:NewAppTypes.INewAppState):NewAppTypes.CreateRequestActionType=>{
     return {
         type:NewAppTypes.CreateRequest,
         payload:data

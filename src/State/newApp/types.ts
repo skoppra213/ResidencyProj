@@ -1,8 +1,8 @@
-export interface IFormInput {
-    applicationTypeId: string,
-}
+// export interface IFormInput {
+//     applicationTypeId: string,
+// }
 
-export interface INewAppState {    
+export interface INewAppState  {    
         applicationNumber?: number,
         userId?: number,
         applicationStatusId?: number,
@@ -16,7 +16,7 @@ export interface INewAppState {
 export const CreateRequest = 'NEWAPP/CREATE';
 export interface CreateRequestActionType {
     type: typeof CreateRequest,
-    payload:IFormInput
+    payload:INewAppState
 }
 
 export const CreateSuccess = 'NEWAPP/CREATE_SUCCESS';

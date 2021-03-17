@@ -13,10 +13,11 @@ import * as Types from './types';
   }
 
 
-  export function lookUpReducer( state:Types.INewAppState = initialState,
+  export function newAppReducer( state:Types.INewAppState = initialState,
     action: Types.NewAppActionsTypes):Types.INewAppState{
         switch (action.type) {
             case Types.CreateSuccess:
+              console.log("in create success",action.payload)
                 return {
                  ...action.payload,
                 }
@@ -30,4 +31,4 @@ import * as Types from './types';
 
   }
 
-  export default lookUpReducer;
+  export default newAppReducer;
