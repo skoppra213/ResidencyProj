@@ -1,8 +1,6 @@
 import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
-import { login } from "../../Services/login";
-import { authenticateResponse, AuthenticateResponse, UserInfo, userInfo } from "../../types/userInfo";
+import { authenticateResponse } from "../../types/userInfo";
 import { useHistory } from "react-router-dom";
-
 import FullPageLoader from "../components/FullPageLoader";
 import { Redirect } from "react-router-dom";
 import { getLocalStorage } from "../../Services/utils/localStorageHelper";

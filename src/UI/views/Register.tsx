@@ -58,13 +58,11 @@ const Register2 = () => {
     let a:Response= await RegisterNonSapUser(arg);
 
     if (a.status ){
-      console.log("in modal");
       let tempModal = {...propsModal}
       tempModal.show = true;
       tempModal.modalBody=a.message;
       tempModal.modalTitle="Info"
       setpropsModal({...tempModal});
-
     }
 
   }
