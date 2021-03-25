@@ -3,19 +3,28 @@ import {  AuthenticateResponse} from "../../types/userInfo";
 import * as actionTypes from "./types";
 import {getloginSuccess,getloginRequestLoading} from "./action"
 
-import {login} from "../../Services/login"
+import {login} from "../../Services/login";
+
 
 
 function* onLoginRequest({ type, payload  }: actionTypes.login_request_action_type) {
   console.log("in onLoginRequest");
     const { username, password} = payload;
+   
     try {
       yield put(getloginRequestLoading());
       const  loginRes:AuthenticateResponse  = yield call(login, username, password);
       loginRes.isLoggedIn = true;
       localStorage.setItem("user", JSON.stringify(loginRes));
       console.log("data",loginRes);
-      // yield put(getloginSuccess("PleaseWork"));
+      let tempState : actionTypes.AuthState ={
+        isLoading:false,
+        jwtToken:loginRes.response.jwtToken,
+        userInfo:loginRes.response.userInfo,
+        isLoggedIn:true
+      }
+      yield put(getloginSuccess(tempState));
+      yield 
     } catch (error) {
 
     }

@@ -23,16 +23,20 @@ export interface login_success_action_type {
     payload: AuthState
 }
 
+export const LOGOUT = 'LOGOUT';
+export interface logout_action_type {
+    type: typeof LOGOUT,
+}
 
 export interface AuthState {
     isLoading:boolean,
     isLoggedIn: boolean,
-    session?: string,
-    userName?: string,
     jwtToken?:string,
-    civilId?:string,
     userInfo?:UserInfo
   }
 
-export type LoginActionTypes = login_request_action_type|login_success_action_type|login_loading_action_type;
+export type LoginActionTypes = login_request_action_type|
+                               login_success_action_type|
+                               login_loading_action_type|
+                               logout_action_type;
 

@@ -66,7 +66,7 @@ const Login = () => {
 	}
 	return (
 		<Layout>
-			{ isLoading && <FullPageLoader />}
+			{/* { isLoading && <FullPageLoader />} */}
 			{!userAuth.isLoggedIn &&
 				<main className="login-bg">
 					<div className="container" style={{ marginBottom: '80px' }}>
@@ -76,7 +76,7 @@ const Login = () => {
 								<div className="card o-hidden border-1 shadow my-5 animate__animated animate__backInDown " style={{ border: '1px solid rgb(189, 189, 189)' }}>
 									<div className="card-header bg-dark">
 										<div className="text-center">
-											{isLoading && <h3 className="text-danger">Loading...</h3>}
+										
 											<h1 className=" text-gray-900 mb-1 shorooq gold" style={{ fontSize: '28px' }}>تسجيل دخول لخدمات
                             البوابة الالكترونية</h1>
 										</div>

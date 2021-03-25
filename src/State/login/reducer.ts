@@ -2,17 +2,15 @@ import {
     LoginActionTypes,
     AuthState,
     LOGIN_SUCCESS,
-    LOGIN_LOADING
+    LOGIN_LOADING,
+    LOGOUT
   } from './types'
   
   const initialState: AuthState = {
-    isLoading:false,  
     isLoggedIn:false,
-    session:undefined,
-    userName:undefined,
     jwtToken:undefined,
-    civilId:undefined,
-    userInfo:undefined
+    userInfo:undefined,
+    isLoading:true
   }
   
   export function loginReducer(
@@ -31,10 +29,34 @@ import {
              ...state,
              isLoggedIn:true,
              isLoading:false,
-             userName:"tryThisOut"
+             userInfo:action.payload.userInfo,
+             jwtToken:action.payload.jwtToken
+
             }
+            case LOGOUT:
+              return {
+               ...state,
+               isLoggedIn:false,
+               isLoading:false,
+               jwtToken:undefined,
+               userInfo:undefined
+  
+              }    
       default:
-        return state
+        let localStorageData:any = localStorage.getItem('user');
+            if (localStorageData) {
+                localStorageData = JSON.parse(localStorageData);
+                return {
+                    ...state,
+                    isLoggedIn:true,
+                    isLoading:false,
+                    jwtToken:localStorageData.response.jwtToken,
+                    userInfo:localStorageData.response.userInfo,
+                }
+            }
+
+            return state;
+       
     }
   }
 

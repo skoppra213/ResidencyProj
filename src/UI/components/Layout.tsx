@@ -33,7 +33,7 @@ const Layout: FC = ({ children }) => {
                     {children}
                 </div>
             </div>
-            { IsLoading && <FullPageLoader />}
+            {/* { IsLoading && <FullPageLoader />} */}
         </>
     )
 }
