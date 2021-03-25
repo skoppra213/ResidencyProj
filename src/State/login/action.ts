@@ -20,3 +20,8 @@ export const getloginSuccess = (state:loginActions.AuthState):loginActions.Login
     }
 }
 
+export const getllogout = ():loginActions.logout_action_type=>{
+    return {
+        type:loginActions.LOGOUT,
+    }
+}

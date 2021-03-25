@@ -1,22 +1,21 @@
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import {  AuthenticateResponse} from "../../types/userInfo";
 import * as actionTypes from "./types";
-import {getloginSuccess,getloginRequestLoading} from "./action"
-
+import {getloginSuccess} from "./action"
+import {setLoading} from "../lookUps/action"; 
 import {login} from "../../Services/login";
 
 
 
+
 function* onLoginRequest({ type, payload  }: actionTypes.login_request_action_type) {
-  console.log("in onLoginRequest");
     const { username, password} = payload;
    
     try {
-      yield put(getloginRequestLoading());
+      yield put(setLoading(true));
       const  loginRes:AuthenticateResponse  = yield call(login, username, password);
       loginRes.isLoggedIn = true;
       localStorage.setItem("user", JSON.stringify(loginRes));
-      console.log("data",loginRes);
       let tempState : actionTypes.AuthState ={
         isLoading:false,
         jwtToken:loginRes.response.jwtToken,
@@ -24,7 +23,9 @@ function* onLoginRequest({ type, payload  }: actionTypes.login_request_action_ty
         isLoggedIn:true
       }
       yield put(getloginSuccess(tempState));
-      yield 
+      yield put(setLoading(false));
+
+       
     } catch (error) {
 
     }

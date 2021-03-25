@@ -23,9 +23,7 @@ const Layout: FC = ({ children }) => {
          <Header />
             <div id="layoutSidenav">
                 <SideMenu />
-                <div id="layoutSidenav_content">
-       
-          
+                <div id="layoutSidenav_content">              
                     {userAuth.isLoggedIn && 
                     <AuthHeader loggedIn={userAuth.isLoggedIn} 
                     fullName={ userAuth.response.userInfo.employeeName}
@@ -33,7 +31,7 @@ const Layout: FC = ({ children }) => {
                     {children}
                 </div>
             </div>
-            {/* { IsLoading && <FullPageLoader />} */}
+            { IsLoading && <FullPageLoader />}
         </>
     )
 }

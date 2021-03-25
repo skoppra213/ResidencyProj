@@ -2,20 +2,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authenticateResponse } from '../../types/userInfo';
 import { getLocalStorage } from '../../Services/utils/localStorageHelper';
+import { useDispatch } from 'react-redux';
+import {getllogout} from "../../State/login"
 
 
 
 const Header = () => {
 
   const userAuth = getLocalStorage("user", authenticateResponse);
-
-
-  
-
+  let dispatch = useDispatch();
 
 
   const logout = () => {
     localStorage.removeItem("user");
+    dispatch(getllogout());
   }
 
 

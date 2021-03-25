@@ -18,7 +18,6 @@ const Login = () => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	const {isLoading} = loginstate;
 	const [isFieldEmpty, setIsFieldEmpty] = useState(false);
 	const [wrongCredintials, setWrongCredintials] = useState(false);
 
@@ -66,7 +65,6 @@ const Login = () => {
 	}
 	return (
 		<Layout>
-			{/* { isLoading && <FullPageLoader />} */}
 			{!userAuth.isLoggedIn &&
 				<main className="login-bg">
 					<div className="container" style={{ marginBottom: '80px' }}>
@@ -128,7 +126,7 @@ const Login = () => {
 			{userAuth.isLoggedIn &&
 				<Redirect
 					to={{
-						pathname: "/personalInfo",
+						pathname: "/newApp",
 					}}
 				/>
 			}
