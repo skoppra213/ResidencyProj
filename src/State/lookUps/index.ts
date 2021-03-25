@@ -1,13 +1,17 @@
 import lookUpReducer  from "./reducer"
 
-import {getAppTypesRequest,getAppTypesSuccess} from "./action"
+import {setLoading,
+    getAppTypesRequest,getAppTypesSuccess,
+    getNationalitiesRequest,getNationalitiesSuccess} from "./action"
 
 import lookUpSaga from "./sagas"
 
 export default lookUpReducer;
 export {lookUpSaga};
 
-export {
+export {setLoading,
     getAppTypesRequest,
-    getAppTypesSuccess
+    getAppTypesSuccess,
+    getNationalitiesRequest,
+    getNationalitiesSuccess
 };

@@ -7,10 +7,10 @@ import {getAppTypesRequest} from "../../State/lookUps";
 import {SelectOptions} from '../../types/UIRelated'
 import {getCreateRequest} from "../../State/newApp";
 function NewApp() {
-	const AppTypesState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
+	const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
   const newAppState = useSelector<RootState,RootState["newApp"]>(state => state.newApp);
   // const [appType, setappType] = useState<SelectOptions>({label:"",value:""});
-  const {AppTypes} = AppTypesState;
+  const {AppTypes} = LookUpState;
   let dispatch = useDispatch();
   useEffect(() => {
     const GetDropdownValues = async () => {

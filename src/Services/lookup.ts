@@ -34,6 +34,17 @@ export const getAppTypes = async ():Promise<SelectOptions[]> =>{
       }      
     });
     let res:SelectOptions[] = await response.json();     
-    console.log("res in appTypes fetch",res);
+    return res;
+}
+
+
+
+export const getNations = async ():Promise<SelectOptions[]> =>{
+  let response = await fetch(GET_NATIONALITIES, { 
+      headers: {
+        'Content-Type': 'application/json'
+      }      
+    });
+    let res:SelectOptions[] = await response.json();     
     return res;
 }

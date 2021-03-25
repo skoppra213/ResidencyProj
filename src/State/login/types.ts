@@ -1,5 +1,4 @@
-
-
+import { UserInfo } from "../../types/userInfo";
 
 export type credentials={
     username: string, 
@@ -21,9 +20,8 @@ export interface login_loading_action_type {
 export const LOGIN_SUCCESS = 'LOGIN/LOGIN_SUCCESS';
 export interface login_success_action_type {
     type: typeof LOGIN_SUCCESS,
-    payload: string
+    payload: AuthState
 }
-
 
 
 export interface AuthState {
@@ -32,7 +30,8 @@ export interface AuthState {
     session?: string,
     userName?: string,
     jwtToken?:string,
-    civilId?:string
+    civilId?:string,
+    userInfo?:UserInfo
   }
 
 export type LoginActionTypes = login_request_action_type|login_success_action_type|login_loading_action_type;

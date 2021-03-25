@@ -6,9 +6,10 @@ import Select from 'react-select';
 import { useForm, Controller } from "react-hook-form";
 import {IState} from "../../State/personalInfo";
 import {SelectOptions} from "../../types/UIRelated"
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "../../State/rootReducer";
-import {assignToSelectType, assignToType} from "../../Services/utils/assignType";
+import { assignToType} from "../../Services/utils/assignType";
+import {getCreateRequest} from "../../State/personalInfo";
 
 
 export interface IFormData extends IState {
@@ -16,26 +17,28 @@ selectedDept?:SelectOptions,
 selectedJobTitle?:SelectOptions
 }
 
-// class TempClass implements IState {
-//   id: number=0;
-//   employeeNumber: number=0;
-//   // employeeNameArabic?: string;
-//   // employeeNameEnglish?: string;
-//   // birthDate?: Date;
-//   // mobileNumber?: number;
-//   // department?: string;
-//   jobTitle?: string | undefined;
-//   hireDate?: Date | undefined;
-//   applicationNumber?: number | undefined;
-//   userId?: number | undefined;
-//   createdDate?: Date | undefined;
-//   updatedDate?: Date | undefined;
+class TempClass implements IState {
+  id: number| undefined;
+  employeeNumber: number| undefined;
+  employeeNameArabic: string| undefined;
+  employeeNameEnglish: string| undefined;
+  birthDate: Date| undefined;
+  mobileNumber: number| undefined;
+  department: string| undefined;
+  jobTitle?: string | undefined;
+  hireDate?: Date | undefined;
+  applicationNumber?: number | undefined;
+  userId?: number | undefined;
+  createdDate?: Date | undefined;
+  updatedDate?: Date | undefined;
+}
 
 
-// }
+
 const PersonalInfo = () => {  
   const { register, handleSubmit, watch, errors,control } = useForm<IFormData>();
   const stateData = useSelector<RootState,RootState["personalInfo"]>(state => state.personalInfo);
+  let dispatch = useDispatch();
   //TODO pick values correctly
   const jobTitleOptions: SelectOptions[] =
     [
@@ -52,10 +55,17 @@ const PersonalInfo = () => {
     const onSubmit = async (data:IFormData) => {
       console.log("data on submit",data);
       console.log("stateData",stateData); 
-      let res:TempClass  = new TempClass();
-      res.
-      // res = assignToType(data,res); 
-      // console.log("res on submit",res);
+      let res  = new TempClass();
+      res = assignToType(data,res); 
+      console.log("res on submit",res);
+      res.department=data.selectedDept?.value;
+      res.jobTitle = data.selectedJobTitle?.value;
+      res.applicationNumber=15;
+      res.userId=5;
+      res.createdDate = new  Date();
+      res.employeeNumber = Number(data.employeeNumber);
+      console.log("res on after the selected  submit",res);
+      dispatch(getCreateRequest(res));
     }
   return (
     <Layout>
@@ -94,14 +104,16 @@ const PersonalInfo = () => {
                             </div>
                             <label className="col-sm-3 col-form-label">رقم الهاتف</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" name="mobileNumber" />
+                              <input type="text" className="form-control form-control-user" 
+                              name="mobileNumber" ref={register} />
                             </div>
                           </div>
                           {/* ################### form- row-003 #################*/}
                           <div className="form-group row">
                             <label className="col-sm-3 col-form-label">اسم الموظف-انجليزي</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" name="employeeNameEnglish" />
+                              <input type="text" className="form-control form-control-user" 
+                              name="employeeNameEnglish" ref={register} />
                             </div>
                             <label className="col-sm-3 col-form-label">تاريخ الميلاد</label>
                             <div className="col-sm-3">

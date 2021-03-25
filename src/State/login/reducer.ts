@@ -1,7 +1,6 @@
 import {
     LoginActionTypes,
     AuthState,
-    LOGIN_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_LOADING
   } from './types'
@@ -12,14 +11,15 @@ import {
     session:undefined,
     userName:undefined,
     jwtToken:undefined,
-    civilId:undefined
+    civilId:undefined,
+    userInfo:undefined
   }
   
   export function loginReducer(
     state:AuthState = initialState,
     action: LoginActionTypes
   ): AuthState {
-      console.log("in loginReducer");
+
     switch (action.type) {
         case LOGIN_LOADING:
         return {

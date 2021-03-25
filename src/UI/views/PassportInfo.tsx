@@ -1,21 +1,75 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Layout from "../components/Layout";
-import DatePicker from "react-datepicker";
+import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
+import { useForm, Controller } from "react-hook-form";
+import {IState} from "../../State/passportInfo";
+import {SelectOptions} from "../../types/UIRelated"
+import { useSelector,useDispatch } from "react-redux";
+import { RootState } from "../../State/rootReducer";
+import { assignToType} from "../../Services/utils/assignType";
+import {getCreateRequest} from "../../State/passportInfo";
+import {getNationalitiesRequest,setLoading} from "../../State/lookUps";
 
 
+export interface IFormData extends IState {
+  selectedNationality?:SelectOptions,
+  selectedIssueCountry?:SelectOptions
+  }
 
+
+class TempClass implements IState{
+  id?:number ;
+  civilID?:number;  
+  nationalityId?:string;
+  passportNumber?:number;
+  issueCountry?:string;
+  issueDate?:Date;
+  expiryDate?:Date;
+  address?:string; 
+  residencyExpiryDate?:Date; 
+  applicationNumber?:number;    
+  userId?:number;    
+  createdDate?:Date; 
+  updatedDate?:Date;
+
+
+}
 const PassportInfo = () => {
-  const [expiaryDate, setExpiaryDate] = useState<Date|null>();
-  const [releaseDate,setReleaseDate] = useState<Date|null>();
-  const [resExpiaryDate, setResExpiaryDate] = useState<Date|null>();
-  const options = [
-    { value: '1', label: 'الكويت' },
-    { value: '2', label: 'مصر' },
-    { value: '3', label: 'الهند' }
-  ]
-  
+
+
+  const { register, handleSubmit,  errors,control } = useForm<FormData>();
+  const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
+  const stateData = useSelector<RootState,RootState["passportInfo"]>(state => state.passportInfo);
+  const {Nationalities} = LookUpState;
+  let dispatch = useDispatch();
+
+  useEffect(() => {
+    const GetDropdownValues = async () => {
+      if (Nationalities === undefined) {
+        dispatch(getNationalitiesRequest());
+      }
+    };
+    GetDropdownValues();
+
+  }, []);
+
+  const onSubmit = async (data:IFormData) => {
+    console.log("data on submit",data);
+    console.log("stateData",stateData); 
+    let res  = new TempClass();
+    res = assignToType(data,res); 
+    console.log("res on submit",res);
+    res.nationalityId=data.selectedNationality?.value;
+    res.issueCountry = data.selectedIssueCountry?.value;
+    res.applicationNumber=15;
+    res.userId=5;
+    res.createdDate = new  Date();
+    // res.employeeNumber = Number(data.employeeNumber);
+    console.log("res on after the selected  submit",res);
+    dispatch(getCreateRequest(res));
+  }
     return (
         <Layout>
         <main className="login-bg">
@@ -35,7 +89,7 @@ const PassportInfo = () => {
                   <div className="row">
                     <div className="col-lg-12">
                       <div className="p-5">
-                        <form className="user">
+                        <form className="user" onSubmit={handleSubmit(onSubmit)}>
                           {/* ################### form- row-001 #################*/}
                           <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">رقم الموظف</label>
@@ -51,45 +105,70 @@ const PassportInfo = () => {
                             </div>
                             <label  className="col-sm-3 col-form-label">الجنسية</label>
                             <div className="col-sm-3">
-                              <select className="form-control form-control-user">
-                                <option>اختر الجنسية</option>
-                                <option value="1">مصري</option>
-                                <option value="2">هندي</option>
-                              </select>
+                                <Controller
+                                  name="selectedNationality"
+                                  control={control}
+                                  placeholder=" اختر الادار  "
+                                  options={Nationalities}
+                                  as={Select}
+                                />
                             </div>
                           </div>
                           {/* ################### form- row-003 #################*/}
                           <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">رقم الجواز</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" />
+                              <input type="text" className="form-control form-control-user"  
+                              name="passportNumber" ref={register} />
                             </div>
                             <label  className="col-sm-3 col-form-label">مكان الاصدار</label>
                             <div className="col-sm-3">
-                               <Select options={options} 
-                               placeholder=" اختر الدولة "
-                              />
+
+                               <Controller
+                                  name="selectedIssueCountry"
+                                  control={control}
+                                  placeholder=" اختر الادار  "
+                                  options={Nationalities}
+                                  as={Select}
+                                />
                             </div>
                           </div>
                           {/* ################### form- row-004 #################*/}
                           <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">تاريخ الاصدار</label>
                             <div className="col-sm-3">
-                            <DatePicker className="form-control " 
-                            selected={releaseDate} 
-                            onChange={(date:Date)  => setReleaseDate(date)} 
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="dd/MM/yyyy "                            
-                              />
+                            <Controller
+                                  control={control}
+                                  name="issueDate"
+                                  render={({ onChange, onBlur, value }) => (
+                                    <ReactDatePicker
+                                      onChange={onChange}
+                                      onBlur={onBlur}
+                                      selected={value}
+                                      dateFormat="dd/MM/yyyy"
+                                      placeholderText="dd/MM/yyyy "   
+                                      className="form-control form-control-user"
+                                    />
+                                  )}
+                                />
+
                             </div>
                             <label  className="col-sm-3 col-form-label">تاريخ الانتهاء</label>
                             <div className="col-sm-3" >
-                            <DatePicker className="form-control " 
-                            selected={expiaryDate} 
-                            onChange={(date:Date)  => setExpiaryDate(date)} 
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="dd/MM/yyyy "                            
-                              />
+                            <Controller
+                                  control={control}
+                                  name="expiryDate"
+                                  render={({ onChange, onBlur, value }) => (
+                                    <ReactDatePicker
+                                      onChange={onChange}
+                                      onBlur={onBlur}
+                                      selected={value}
+                                      dateFormat="dd/MM/yyyy"
+                                      placeholderText="dd/MM/yyyy "   
+                                      className="form-control form-control-user"
+                                    />
+                                  )}
+                                />
                             </div>
                            
                           </div>
@@ -97,26 +176,36 @@ const PassportInfo = () => {
                           <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">عنوان السكن</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" />
+                              <input type="text" className="form-control form-control-user"  
+                              name="address" ref={register} />
                             </div>
                             <label  className="col-sm-3 col-form-label">تاريخ انتهاء الاقامة</label>
                             <div className="col-sm-3">
-                            <DatePicker className="form-control " 
-                            selected={resExpiaryDate} 
-                            onChange={(date:Date)  => setResExpiaryDate(date)} 
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="dd/MM/yyyy "                            
-                              />
+                            <Controller
+                                  control={control}
+                                  name="residencyExpiryDate"
+                                  render={({ onChange, onBlur, value }) => (
+                                    <ReactDatePicker
+                                      onChange={onChange}
+                                      onBlur={onBlur}
+                                      selected={value}
+                                      dateFormat="dd/MM/yyyy"
+                                      placeholderText="dd/MM/yyyy "   
+                                      className="form-control form-control-user"
+                                    />
+                                  )}
+                                />
                             </div>
                           </div>
                           {/* ################### form- row-006 #################*/}
                           {/* ################# submit btn ##################### */}
-                          <div className="row justify-content-between"> <a href="001-001.html" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
+                          <div className="row justify-content-between">
+                             <button type="submit" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
                               السابق
-                            </a>
-                            <a href="001-003.html" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
+                            </button>
+                            <button type="submit" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
                               التالي
-                            </a>
+                            </button >
                           </div>
                           {/* ################# end submit btn ##################### */}
                         </form>

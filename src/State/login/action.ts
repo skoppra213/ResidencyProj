@@ -13,10 +13,10 @@ export const getloginRequestLoading = ():loginActions.login_loading_action_type=
             }
 }
 
-export const getloginSuccess = (payload:string):loginActions.LoginActionTypes=>{
+export const getloginSuccess = (state:loginActions.AuthState):loginActions.LoginActionTypes=>{
     return {
         type:loginActions.LOGIN_SUCCESS,
-        payload:"login succeed"
+        payload:state
     }
 }
 

@@ -1,6 +1,7 @@
-import {IPersonalInfo} from "./PersonalInfo";
-
+import {IPersonalInfo} from "./personalInfo";
+import {IPassportInfo} from "./passportInfo";
 
 export type {
-    IPersonalInfo
+    IPersonalInfo,
+    IPassportInfo
 };

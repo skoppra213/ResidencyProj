@@ -15,7 +15,7 @@ function* onLoginRequest({ type, payload  }: actionTypes.login_request_action_ty
       loginRes.isLoggedIn = true;
       localStorage.setItem("user", JSON.stringify(loginRes));
       console.log("data",loginRes);
-      yield put(getloginSuccess("PleaseWork"));
+      // yield put(getloginSuccess("PleaseWork"));
     } catch (error) {
 
     }

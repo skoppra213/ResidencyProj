@@ -6,3 +6,5 @@ export const GET_NATIONALITIES = `${BASEURL}/api/LookUps/Nationality`;
 export const GET_USERTYPES = `${BASEURL}/api/LookUps/UserType`; 
 export const GET_APPTYPES =  `${BASEURL}/api/LookUps/ApplicationTypes`;
 export const NEWAPP_CREATE =`${BASEURL}/api/UserApplications`;
+export const PERSONAL_INFO_CREATE =`${BASEURL}/api/PersonalInformation`;
+export const PASSPORT_INFO_CREATE =`${BASEURL}api/PassportInformation`;
