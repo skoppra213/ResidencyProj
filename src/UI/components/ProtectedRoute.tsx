@@ -8,13 +8,12 @@ import { authenticateResponse } from "../../types/userInfo";
 const ProtectedRoute: React.ComponentType<any> = ({ component: Component, ...rest }) => {
 	
 	const userAuth = getLocalStorage("user", authenticateResponse);
-
 	return (
 		<Route
 			{...rest}
 			render={(props) => {
 				console.log("props", props);
-				if (userAuth.isLoggedIn) {
+				if (userAuth.isLoggedIn===true) {
 					return <Component {...props} />;
 				}
 				else {

@@ -16,20 +16,34 @@ export interface CreateSuccessActionType {
     payload:IState
 }
 
-export const IncompleteFetchRequest = 'PASSPORTINFO/FETCH';
-export interface FetchIncompleteActionType {
-    type: typeof IncompleteFetchRequest
+export const FetchRequest = 'PASSPORTINFO/FETCH';
+export interface FetchActionType {
+    type: typeof FetchRequest,
+    payload:number
 }
 
-export const IncompleteFetchSuccess = 'PASSPORTINFO/FETCH_SUCCESS';
-export interface IncompleteFetchSuccessActionType {
-    type: typeof IncompleteFetchSuccess,
+export const FetchSuccess = 'PASSPORTINFO/FETCH_SUCCESS';
+export interface FetchSuccessActionType {
+    type: typeof FetchSuccess,
+    payload:IState
+}
+
+export const UpdateRequest = 'PASSPORTINFO/UPDATE';
+export interface UpdateActionType {
+    type: typeof UpdateRequest,
+    payload:IState
+}
+
+export const UpdateSuccess = 'PASSPORTINFO/UPDATE_SUCCESS';
+export interface UpdateSuccessActionType {
+    type: typeof UpdateSuccess,
     payload:IState
 }
 
 
-export type ActionsTypes =CreateRequestActionType|CreateSuccessActionType|
-                                FetchIncompleteActionType|IncompleteFetchSuccessActionType;
+export type ActionsTypes = CreateRequestActionType | CreateSuccessActionType |
+                                    FetchActionType | FetchSuccessActionType |
+                                    UpdateActionType | UpdateSuccessActionType;
 
 
 

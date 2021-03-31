@@ -1,11 +1,10 @@
-import {NEWAPP_CREATE } from "./Urls";
-import {INewAppState} from "../State/newApp";
+import {NEWAPP_CREATE,NEWAPP_GETINCOMPLETE,NEWAPP_UPDATE } from "./Urls";
+import {IState} from "../State/newApp";
 import { useSelector, useDispatch } from 'react-redux';
 import {RootState} from '../State/rootReducer' ;
 
-export const createNewApp = async (data:INewAppState): Promise<INewAppState> => {
-    console.log("in create newApp service",data);
-
+export const createNewApp = async (data:IState): Promise<IState> => {
+  let res: IState={} ;
     try {
       let response = await fetch(NEWAPP_CREATE, {
         method: 'POST',
@@ -19,18 +18,19 @@ export const createNewApp = async (data:INewAppState): Promise<INewAppState> => 
       if (!response.ok) {
         // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
       }
-      let temp:INewAppState = await response.json();
-      let res :INewAppState = 
-              {applicationDate:temp.applicationDate,
-              applicationNumber : temp.applicationNumber,
-               applicationStatusId:temp.applicationStatusId,
-               applicationTypeId:temp.applicationTypeId,
-               isActive:temp.isActive,
-               remark:temp.remark,
-               stepNo:temp.stepNo,
-               userId:temp.userId
-            }
-      console.log("response ",res);
+      let temp:IState = await response.json();
+       res =
+      {
+        applicationDate: temp.applicationDate,
+        applicationNumber: temp.applicationNumber,
+        applicationStatusId: temp.applicationStatusId,
+        applicationTypeId: temp.applicationTypeId,
+        isActive: temp.isActive,
+        remark: temp.remark,
+        stepNo: temp.stepNo,
+        userId: temp.userId
+      }
+
       return res;
   
     } catch (e) {
@@ -39,3 +39,86 @@ export const createNewApp = async (data:INewAppState): Promise<INewAppState> => 
     //   return { ...authenticateResponse, status: 500, message: e, hasError: true }
     }
   }
+
+
+
+  export const fetchIncompleteNewApp = async (userId:number): Promise<IState> => {
+
+    
+    let res :IState ={};
+    try {
+      let url = `${NEWAPP_GETINCOMPLETE}${userId}`;
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+      });
+      
+      if (!response.ok) {
+        // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
+      }
+      let temp:IState = await response.json();
+       res = 
+              {
+               applicationDate:temp.applicationDate,
+               applicationNumber : temp.applicationNumber,
+               applicationStatusId:temp.applicationStatusId,
+               applicationTypeId:temp.applicationTypeId,
+               isActive:temp.isActive,
+               remark:temp.remark,
+               stepNo:temp.stepNo,
+               userId:temp.userId
+            }
+      return res;
+  
+    } catch (e) {
+      console.log("NET error incomp",e);
+      return res
+   
+    }
+  }  
+
+  export const updateNewApp = async (data:IState): Promise<IState> => {
+
+    console.log("UpdatNewApp in service userId",data);
+    
+    let res :IState ={};
+    try {
+      let url = `${NEWAPP_UPDATE}${data.applicationNumber}`;
+      let response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...data
+         })
+
+      });
+      
+      if (!response.ok) {
+        // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
+      }
+      let temp:IState = await response.json();
+       res = 
+              {
+               applicationDate:temp.applicationDate,
+               applicationNumber : temp.applicationNumber,
+               applicationStatusId:temp.applicationStatusId,
+               applicationTypeId:temp.applicationTypeId,
+               isActive:temp.isActive,
+               remark:temp.remark,
+               stepNo:temp.stepNo,
+               userId:temp.userId
+            }
+    console.log("in UpdateNewApp service",res,temp)
+      return res;
+  
+    } catch (e) {
+      console.log("NET error UpdateNewApp",e);
+      return res
+   
+    }
+  }  

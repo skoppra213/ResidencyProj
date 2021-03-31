@@ -4,15 +4,30 @@ import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
 import {RootState} from '../../State/rootReducer';
 import {getAppTypesRequest} from "../../State/lookUps";
-import {SelectOptions} from '../../types/UIRelated'
-import {getCreateRequest} from "../../State/newApp";
+import {SelectOptions} from '../../types/UIRelated';
+import { useHistory } from "react-router-dom";
+import {getCreateRequest,getFetchIncompleteRequest,getUpdateRequest} from "../../State/newApp";
+import {Steps} from "../../types/Enums"
+
 function NewApp() {
 	const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
   const newAppState = useSelector<RootState,RootState["newApp"]>(state => state.newApp);
-  // const [appType, setappType] = useState<SelectOptions>({label:"",value:""});
+  const userData = useSelector<RootState,RootState["login"]>(state => state.login);
+  const [appType, setappType] = useState<SelectOptions|undefined>({label:"",value:""});
+  const history = useHistory();
+
   const {AppTypes} = LookUpState;
   let dispatch = useDispatch();
+
   useEffect(() => {
+    if (newAppState.applicationNumber===undefined)
+    {
+      dispatch(getFetchIncompleteRequest(userData.userInfo?.userId as number));
+    }
+    else{
+      console.log("newApp state is exists",newAppState.applicationTypeId);
+    }
+
     const GetDropdownValues = async () => {
       if (AppTypes === undefined) {
         dispatch(getAppTypesRequest());
@@ -22,22 +37,47 @@ function NewApp() {
 
   }, []);
 
+  useEffect(() => {
+    console.log("in useEffect ddd");
+   let selectedObj = AppTypes?.find(a=>a.value===newAppState.applicationTypeId?.toString());
+     setappType(selectedObj);
+
+    return () => {
+    }
+  }, [newAppState.applicationTypeId,AppTypes]);
+
+  
+
 	const handleSubmit = async (e: React.SyntheticEvent) => {
 		 e.preventDefault();
-     newAppState.applicationDate = new Date();
-     newAppState.userId=5;
-     newAppState.isActive=false;
-     newAppState.stepNo=0;
-     newAppState.applicationStatusId=1;
-     newAppState.remark="ss";
-   
+     newAppState.applicationTypeId = Number(appType?.value);
+     if (newAppState.applicationNumber===undefined||newAppState.applicationNumber===0)
+     {
+      newAppState.applicationDate = new Date();
+      newAppState.userId=userData.userInfo?.userId;
+      newAppState.isActive=false;
+      newAppState.stepNo=Steps.CreateApp;
+      newAppState.applicationStatusId=1;
+      newAppState.remark="ss";
+      dispatch(getCreateRequest(newAppState));
+     }
+    else
+    {
+      console.log("in else");
+      
+      newAppState.remark="ss1";
+      dispatch(getUpdateRequest(newAppState));
+    }
+    history.push("/personalInfo");
 
-		  dispatch(getCreateRequest(newAppState));
 	}
 
-  const handleAppTypeChange = async (value?:SelectOptions|SelectOptions[] | null) => {
-    let temp : SelectOptions= value as SelectOptions;
-    newAppState.applicationTypeId = Number(temp?.value);
+  const handleAppTypeChange = async (value?:SelectOptions|SelectOptions[] | null) => { 
+   if (value)
+   {
+      let temp : SelectOptions= value as SelectOptions;
+      setappType(temp);
+   }
   }
     return (
         <Layout>
@@ -62,10 +102,12 @@ function NewApp() {
                             <input type="email" className="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="ادخل رقم الموظف " />
                           </div>
                           <div className="form-group">
+                           
                             <Select 
                              name="AppType" 
                              placeholder=" Choose App Type "
                              options={AppTypes}
+                             value= {appType}
                              onChange={handleAppTypeChange}
                               />
                           </div>

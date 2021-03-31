@@ -4,7 +4,7 @@ export interface IPersonalInfo  {
     employeeNameArabic?:string,
     employeeNameEnglish?:string,  
     birthDate?:Date,
-    mobileNumber?:number,  
+    mobileNumber?:string,  
     department?:string, 
     jobTitle?:string,  
     hireDate?:Date,  

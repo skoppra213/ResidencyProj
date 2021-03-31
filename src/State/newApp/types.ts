@@ -1,47 +1,53 @@
-// export interface IFormInput {
-//     applicationTypeId: string,
-// }
 
-export interface INewAppState  {    
-        applicationNumber?: number,
-        userId?: number,
-        applicationStatusId?: number,
-        applicationTypeId?: number,
-        applicationDate?: Date,
-        isActive?: boolean,
-        remark?: string,
-        stepNo?: number
+
+import {INewAppState} from "../../types/newApp"
+
+export interface IState extends INewAppState{
+
 }
 
 export const CreateRequest = 'NEWAPP/CREATE';
 export interface CreateRequestActionType {
     type: typeof CreateRequest,
-    payload:INewAppState
+    payload:IState
 }
 
 export const CreateSuccess = 'NEWAPP/CREATE_SUCCESS';
 export interface CreateSuccessActionType {
     type: typeof CreateSuccess,
-    payload:INewAppState
+    payload:IState
 }
 
 export const IncompleteFetchRequest = 'NEWAPP/FETCH';
 export interface FetchIncompleteActionType {
-    type: typeof IncompleteFetchRequest
+    type: typeof IncompleteFetchRequest,
+    payload:number
 }
 
 export const IncompleteFetchSuccess = 'NEWAPP/FETCH_SUCCESS';
 export interface IncompleteFetchSuccessActionType {
     type: typeof IncompleteFetchSuccess,
-    payload:INewAppState
+    payload:IState
+}
+
+export const UpdateRequest = 'NEWAPP/UPDATE';
+export interface UpdateActionType {
+    type: typeof UpdateRequest,
+    payload:IState
+}
+
+export const UpdateSuccess = 'NEWAPP/UPDATE_SUCCESS';
+export interface UpdateSuccessActionType {
+    type: typeof UpdateSuccess,
+    payload:IState
 }
 
 
 
 
-
 export type NewAppActionsTypes =CreateRequestActionType|CreateSuccessActionType|
-                                FetchIncompleteActionType|IncompleteFetchSuccessActionType;
+                                FetchIncompleteActionType|IncompleteFetchSuccessActionType|
+                                UpdateActionType|UpdateSuccessActionType;
 
 
 

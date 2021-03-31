@@ -14,6 +14,7 @@ export class UserInfo {
     section?: string;
     nationality: string = "";
     birthDate?: Date;
+    hireDate?: Date;
     jobTitle?: string;
     organization?: string;
     userTypeId: number = 0;

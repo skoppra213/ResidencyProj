@@ -1,7 +1,7 @@
 import * as Types from './types';
 
 
-  const initialState: Types.INewAppState = {
+  const initialState: Types.IState = {
    applicationDate:undefined,
    applicationStatusId:undefined,
    applicationNumber:undefined,
@@ -13,21 +13,24 @@ import * as Types from './types';
   }
 
 
-  export function newAppReducer( state:Types.INewAppState = initialState,
-    action: Types.NewAppActionsTypes):Types.INewAppState{
-        switch (action.type) {
-            case Types.CreateSuccess:
-              console.log("in create success",action.payload)
-                return {
-                 ...action.payload,
-                }
-             case Types.IncompleteFetchSuccess:
-                return {
-                 ...action.payload,
-                }
-          default:
-            return state
+  export function newAppReducer( state:Types.IState = initialState,
+    action: Types.NewAppActionsTypes):Types.IState{
+    switch (action.type) {
+      case Types.CreateSuccess:
+        return {
+          ...action.payload,
         }
+      case Types.IncompleteFetchSuccess:
+        return {
+          ...action.payload,
+        }
+      case Types.UpdateSuccess:
+        return {
+          ...action.payload,
+        }
+      default:
+        return state
+    }
 
   }
 

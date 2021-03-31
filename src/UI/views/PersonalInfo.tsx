@@ -4,27 +4,30 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { useForm, Controller } from "react-hook-form";
-import {IState} from "../../State/personalInfo";
-import {SelectOptions} from "../../types/UIRelated"
-import { useSelector,useDispatch } from "react-redux";
+import { IState } from "../../State/personalInfo";
+import { SelectOptions } from "../../types/UIRelated"
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../State/rootReducer";
-import { assignToType} from "../../Services/utils/assignType";
-import {getCreateRequest} from "../../State/personalInfo";
+import { assignToType } from "../../Services/utils/assignType";
+import { getCreateRequest,getFetchRequest,getUpdateRequest as personalInfoUpdate } from "../../State/personalInfo";
+import { getFetchIncompleteRequest,getUpdateRequest } from "../../State/newApp";
+import { useHistory } from "react-router-dom";
+import {Steps} from "../../types/Enums"
 
 
 export interface IFormData extends IState {
-selectedDept?:SelectOptions,
-selectedJobTitle?:SelectOptions
+  selectedDept?: SelectOptions,
+  selectedJobTitle?: SelectOptions
 }
 
 class TempClass implements IState {
-  id: number| undefined;
-  employeeNumber: number| undefined;
-  employeeNameArabic: string| undefined;
-  employeeNameEnglish: string| undefined;
-  birthDate: Date| undefined;
-  mobileNumber: number| undefined;
-  department: string| undefined;
+  id: number | undefined;
+  employeeNumber: number | undefined;
+  employeeNameArabic: string | undefined;
+  employeeNameEnglish: string | undefined;
+  birthDate: Date | undefined;
+  mobileNumber: string | undefined;
+  department: string | undefined;
   jobTitle?: string | undefined;
   hireDate?: Date | undefined;
   applicationNumber?: number | undefined;
@@ -35,10 +38,27 @@ class TempClass implements IState {
 
 
 
-const PersonalInfo = () => {  
-  const { register, handleSubmit, watch, errors,control } = useForm<IFormData>();
-  const stateData = useSelector<RootState,RootState["personalInfo"]>(state => state.personalInfo);
+const PersonalInfo = () => {
+  const history = useHistory();
+  const newAppState = useSelector<RootState, RootState["newApp"]>(state => state.newApp);
+  const loginData = useSelector<RootState, RootState["login"]>(state => state.login);
+  const stateData = useSelector<RootState, RootState["personalInfo"]>(state => state.personalInfo);
+  const { userInfo } = loginData;
+  
   let dispatch = useDispatch();
+  const { register, handleSubmit, watch, errors,setValue, getValues,control } = useForm<IFormData>({
+    defaultValues:{
+      userId : userInfo?.userId,
+      birthDate : userInfo?.birthDate?new Date(userInfo?.birthDate as Date):undefined,
+      employeeNumber:userInfo?.employeeNumber?Number(userInfo?.employeeNumber):undefined,
+      employeeNameArabic : userInfo?.employeeName,
+      mobileNumber : userInfo?.mobileNumber,
+      createdDate:  undefined,
+      updatedDate: undefined,
+      hireDate: userInfo?.hireDate?new Date(userInfo?.hireDate as Date):undefined
+    }
+  });
+
   //TODO pick values correctly
   const jobTitleOptions: SelectOptions[] =
     [
@@ -46,27 +66,62 @@ const PersonalInfo = () => {
       { label: "مبرمج", value: "2" }
     ]
 
-    const deptOptions: SelectOptions[] =
+  const deptOptions: SelectOptions[] =
     [
       { label: "نظم المعلومات", value: "1" },
       { label: "الشئون الادارية", value: "2" }
     ]
 
-    const onSubmit = async (data:IFormData) => {
-      console.log("data on submit",data);
-      console.log("stateData",stateData); 
-      let res  = new TempClass();
-      res = assignToType(data,res); 
-      console.log("res on submit",res);
-      res.department=data.selectedDept?.value;
-      res.jobTitle = data.selectedJobTitle?.value;
-      res.applicationNumber=15;
-      res.userId=5;
-      res.createdDate = new  Date();
-      res.employeeNumber = Number(data.employeeNumber);
-      console.log("res on after the selected  submit",res);
-      dispatch(getCreateRequest(res));
+
+
+  useEffect(() => {
+    if (newAppState.applicationNumber === undefined) {
+       dispatch(getFetchIncompleteRequest(userInfo?.userId as number));
     }
+  }, []);
+
+  useEffect(() => {
+    if (newAppState.stepNo as number  >= Steps.PersonalInfo) {
+       dispatch(getFetchRequest(newAppState.applicationNumber as number));
+   }
+  }, [newAppState.stepNo]);
+
+  useEffect(() => {
+
+    setValue("employeeNameArabic", stateData.employeeNameArabic);
+    setValue("employeeNameEnglish", stateData.employeeNameEnglish);
+    setValue("mobileNumber", stateData.mobileNumber);
+    setValue("employeeNumber", stateData.employeeNumber);
+    setValue("selectedJobTitle", jobTitleOptions.find(j => j.value === stateData.jobTitle));
+    setValue("selectedDept", deptOptions.find(j => j.value === stateData.department));
+    
+  }, [stateData]);
+
+  const onSubmit = async (data: IFormData) => {
+
+    let res = new TempClass();
+    res = assignToType(data, res);
+    console.log("res on submit", res);
+    res.department = data.selectedDept?.value;
+    res.jobTitle = data.selectedJobTitle?.value;
+    res.applicationNumber = newAppState.applicationNumber;
+    res.userId = newAppState.userId;
+    res.employeeNumber = Number(data?.employeeNumber);
+
+    if(stateData.id ===undefined ||stateData.id==0)
+    {
+      res.createdDate = new Date();
+      dispatch(getCreateRequest(res));
+      newAppState.stepNo =Steps.PersonalInfo;
+      dispatch(getUpdateRequest(newAppState));
+    }
+   else{
+     res.id = stateData.id;
+     dispatch(personalInfoUpdate(res));
+   }
+
+    history.push("/passportInfo");
+  }
   return (
     <Layout>
       <main className="login-bg">
@@ -91,47 +146,48 @@ const PersonalInfo = () => {
                           <div className="form-group row">
                             <label className="col-sm-3 col-form-label">رقم الموظف</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" 
-                              name="employeeNumber" ref={register} />
+                              <input type="number" className="form-control form-control-user"
+                                name="employeeNumber" defaultValue={userInfo?.employeeNumber} ref={register} />
                             </div>
                           </div>
                           {/* ################### form- row-002 #################*/}
                           <div className="form-group row">
                             <label htmlFor="employeeNameArabic" className="col-sm-3 col-form-label">اسم الموظف-عربي</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" 
-                              name="employeeNameArabic"  ref={register}/>
+                              <input type="text" className="form-control form-control-user"
+                                name="employeeNameArabic"  ref={register} />
                             </div>
                             <label className="col-sm-3 col-form-label">رقم الهاتف</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" 
-                              name="mobileNumber" ref={register} />
+                              <input type="text" className="form-control form-control-user"
+                                name="mobileNumber" ref={register} />
                             </div>
                           </div>
                           {/* ################### form- row-003 #################*/}
                           <div className="form-group row">
                             <label className="col-sm-3 col-form-label">اسم الموظف-انجليزي</label>
                             <div className="col-sm-3">
-                              <input type="text" className="form-control form-control-user" 
-                              name="employeeNameEnglish" ref={register} />
+                              <input type="text" className="form-control form-control-user"
+                                name="employeeNameEnglish" ref={register} />
                             </div>
                             <label className="col-sm-3 col-form-label">تاريخ الميلاد</label>
                             <div className="col-sm-3">
                               {/* <input type="date" className="form-control form-control-user" /> */}
                               <Controller
-                                  control={control}
-                                  name="birthDate"
-                                  render={({ onChange, onBlur, value }) => (
-                                    <ReactDatePicker
-                                      onChange={onChange}
-                                      onBlur={onBlur}
-                                      selected={value}
-                                      dateFormat="dd/MM/yyyy"
-                                      placeholderText="dd/MM/yyyy "   
-                                      className="form-control form-control-user"
-                                    />
-                                  )}
-                                />
+                                control={control}
+                                name="birthDate"
+                                render={({ onChange, onBlur, value }) => (
+                                  <ReactDatePicker
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    selected={value}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="dd/MM/yyyy "
+                                    className="form-control form-control-user"
+                                    disabled
+                                  />
+                                )}
+                              />
 
                             </div>
                           </div>
@@ -139,7 +195,7 @@ const PersonalInfo = () => {
                           <div className="form-group row">
                             <label className="col-sm-3 col-form-label">الادارة/القسم</label>
                             <div className="col-sm-3">
-                            <Controller
+                              <Controller
                                 name="selectedDept"
                                 control={control}
                                 placeholder=" اختر الادار  "
@@ -150,7 +206,7 @@ const PersonalInfo = () => {
                             </div>
                             <label className="col-sm-3 col-form-label">المسمى الوظيفي</label>
                             <div className="col-sm-3">
-                            <Controller
+                              <Controller
                                 name="selectedJobTitle"
                                 control={control}
                                 placeholder=" اختر المسمى الوظيفي  "
@@ -165,19 +221,20 @@ const PersonalInfo = () => {
                             <label className="col-sm-3 col-form-label">تاريخ التعيين</label>
                             <div className="col-sm-3">
                               <Controller
-                                  control={control}
-                                  name="hireDate"
-                                  render={({ onChange, onBlur, value }) => (
-                                    <ReactDatePicker
-                                      onChange={onChange}
-                                      onBlur={onBlur}
-                                      selected={value}
-                                      dateFormat="dd/MM/yyyy"
-                                      placeholderText="dd/MM/yyyy "   
-                                      className="form-control form-control-user"
-                                    />
-                                  )}
-                                />
+                                control={control}
+                                name="hireDate"
+                                render={({ onChange, onBlur, value }) => (
+                                  <ReactDatePicker
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    selected={value}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="dd/MM/yyyy "
+                                    className="form-control form-control-user"
+                                    disabled
+                                  />
+                                )}
+                              />
                             </div>
                           </div>
                           {/* ################### form- row-006 #################*/}

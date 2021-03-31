@@ -9,8 +9,10 @@ import {SelectOptions} from "../../types/UIRelated"
 import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "../../State/rootReducer";
 import { assignToType} from "../../Services/utils/assignType";
-import {getCreateRequest} from "../../State/passportInfo";
-import {getNationalitiesRequest,setLoading} from "../../State/lookUps";
+import {getCreateRequest,getFetchRequest,getUpdateRequest as updatePassportInfo} from "../../State/passportInfo";
+import {getNationalitiesRequest} from "../../State/lookUps";
+import { getFetchIncompleteRequest,getUpdateRequest } from "../../State/newApp";
+import {Steps} from "../../types/Enums"
 
 
 export interface IFormData extends IState {
@@ -34,17 +36,26 @@ class TempClass implements IState{
   createdDate?:Date; 
   updatedDate?:Date;
 
-
 }
 const PassportInfo = () => {
 
 
-  const { register, handleSubmit,  errors,control } = useForm<FormData>();
+
   const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
+  const newAppState = useSelector<RootState, RootState["newApp"]>(state => state.newApp);
+  const loginData = useSelector<RootState, RootState["login"]>(state => state.login);
   const stateData = useSelector<RootState,RootState["passportInfo"]>(state => state.passportInfo);
   const {Nationalities} = LookUpState;
-  let dispatch = useDispatch();
+  const { userInfo } = loginData;
 
+  let dispatch = useDispatch();
+  const { register, handleSubmit, watch, errors,setValue, getValues,control } = useForm<IFormData>({
+    defaultValues:{
+      userId : userInfo?.userId,
+      civilID: userInfo?.civilId?Number(userInfo?.civilId):undefined,
+
+    }
+  });
   useEffect(() => {
     const GetDropdownValues = async () => {
       if (Nationalities === undefined) {
@@ -55,6 +66,35 @@ const PassportInfo = () => {
 
   }, []);
 
+  useEffect(() => {
+    if (newAppState.applicationNumber === undefined) {
+       dispatch(getFetchIncompleteRequest(userInfo?.userId as number));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (newAppState.stepNo as number  >= Steps.PassportInfo) {
+       dispatch(getFetchRequest(newAppState.applicationNumber as number));
+   }
+  }, [newAppState.stepNo]);
+
+
+  useEffect(() => {
+
+    setValue("passportNumber", stateData.passportNumber);
+    // setValue("employeeNameEnglish", stateData.employeeNameEnglish);
+    // setValue("mobileNumber", stateData.mobileNumber);
+    // setValue("employeeNumber", stateData.employeeNumber);
+    if(Nationalities!==undefined ) 
+    {
+      setValue("selectedNationality", (Nationalities as SelectOptions[]).find(j => j.value === stateData.nationalityId));
+      setValue("selectedIssueCountry", (Nationalities as SelectOptions[]).find(j => j.value === stateData.issueCountry));
+    }
+
+
+    
+  }, [stateData,Nationalities]);
+
   const onSubmit = async (data:IFormData) => {
     console.log("data on submit",data);
     console.log("stateData",stateData); 
@@ -63,12 +103,24 @@ const PassportInfo = () => {
     console.log("res on submit",res);
     res.nationalityId=data.selectedNationality?.value;
     res.issueCountry = data.selectedIssueCountry?.value;
-    res.applicationNumber=15;
-    res.userId=5;
-    res.createdDate = new  Date();
-    // res.employeeNumber = Number(data.employeeNumber);
-    console.log("res on after the selected  submit",res);
-    dispatch(getCreateRequest(res));
+    res.applicationNumber=newAppState.applicationNumber;;
+    res.userId=newAppState.userId;
+    res.civilID = userInfo?.civilId?Number(userInfo?.civilId):undefined;
+
+
+ 
+    if(stateData.id ===undefined ||stateData.id===0)
+    {
+      res.createdDate = new Date();
+      dispatch(getCreateRequest(res));
+      newAppState.stepNo =Steps.PassportInfo;
+      dispatch(getUpdateRequest(newAppState));
+    }
+   else{
+     res.id = stateData.id;
+     dispatch(updatePassportInfo(res));
+   }
+
   }
     return (
         <Layout>
@@ -91,12 +143,12 @@ const PassportInfo = () => {
                       <div className="p-5">
                         <form className="user" onSubmit={handleSubmit(onSubmit)}>
                           {/* ################### form- row-001 #################*/}
-                          <div className="form-group row">
+                          {/* <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">رقم الموظف</label>
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user" />
                             </div>
-                          </div>
+                          </div> */}
                           {/* ################### form- row-002 #################*/}
                           <div className="form-group row">
                             <label  className="col-sm-3 col-form-label">الرقم المتسلسل</label>
