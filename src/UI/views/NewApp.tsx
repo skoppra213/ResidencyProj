@@ -38,7 +38,7 @@ function NewApp() {
   }, []);
 
   useEffect(() => {
-    console.log("in useEffect ddd");
+    console.log("in useEffect ddd",newAppState.applicationTypeId,AppTypes);
    let selectedObj = AppTypes?.find(a=>a.value===newAppState.applicationTypeId?.toString());
      setappType(selectedObj);
 

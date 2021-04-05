@@ -5,6 +5,7 @@ import lookUpReducer from "./lookUps";
 import newAppReducer from "./newApp";
 import personalInfoReducer  from "./personalInfo";
 import passportInfoReducer from "./passportInfo";
+import attachmentInfoReducer from "./attachmentDocuments"
 
 
 
@@ -13,8 +14,9 @@ export const rootReducer = combineReducers({
     lookUp:lookUpReducer,
     newApp:newAppReducer,
     personalInfo:personalInfoReducer,
-    passportInfo:passportInfoReducer
+    passportInfo:passportInfoReducer,
+    attachmentInfo:attachmentInfoReducer
   });
 
-  export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>
 

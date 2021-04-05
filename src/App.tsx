@@ -12,6 +12,7 @@ import Footer from "./UI/components/Footer";
 import NewRequest from "./UI/views/NewRequest";
 import TestRBwithRHF from "./UI/views/TestRBwithRHF";
 import NewApp from "./UI/views/NewApp";
+import FileAttachments from "./UI/views/FileAttachments";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
 						<ProtectedRoute exact path="/passportInfo" component={PassportInfo} />
 						<ProtectedRoute exact path="/newRequest" component={NewRequest} />
 						<ProtectedRoute exact path="/newApp" component={NewApp} />
+						<ProtectedRoute exact path="/fileAttachements" component={FileAttachments} />
 						<Route exact path="/notfound" component={NotFound} />
 						<Redirect to="/notfound" />
 					</Switch>

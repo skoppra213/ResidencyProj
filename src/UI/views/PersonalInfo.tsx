@@ -12,7 +12,8 @@ import { assignToType } from "../../Services/utils/assignType";
 import { getCreateRequest,getFetchRequest,getUpdateRequest as personalInfoUpdate } from "../../State/personalInfo";
 import { getFetchIncompleteRequest,getUpdateRequest } from "../../State/newApp";
 import { useHistory } from "react-router-dom";
-import {Steps} from "../../types/Enums"
+import {Steps} from "../../types/Enums";
+
 
 
 export interface IFormData extends IState {

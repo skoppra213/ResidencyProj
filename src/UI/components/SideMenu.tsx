@@ -39,12 +39,13 @@ const SideMenu = () => {
                 </span>
                 <span>بيانات الجواز والاقامة</span>
               </NavLink>
-              <a className="nav-link" href="001-003.html">
+              <NavLink  activeClassName="active" className="nav-link" to="/fileAttachements">
                 <span className="sb-nav-link-icon">
                   <i className="fas fa-angle-double-left" />&nbsp;&nbsp;
                 </span>
                 <span>المرفقات</span>
-              </a>
+              </NavLink>
+      
               <a className="nav-link" href="001-004.html">
                 <span className="sb-nav-link-icon">
                   <i className="fas fa-angle-double-left" />&nbsp;&nbsp;

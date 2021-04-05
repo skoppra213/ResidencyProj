@@ -73,8 +73,10 @@ const PassportInfo = () => {
   }, []);
 
   useEffect(() => {
+    console.log("in useeffect/newAppState.stepNo");
     if (newAppState.stepNo as number  >= Steps.PassportInfo) {
        dispatch(getFetchRequest(newAppState.applicationNumber as number));
+       console.log("in useeffect/newAppState.stepNo")
    }
   }, [newAppState.stepNo]);
 
@@ -82,9 +84,11 @@ const PassportInfo = () => {
   useEffect(() => {
 
     setValue("passportNumber", stateData.passportNumber);
-    // setValue("employeeNameEnglish", stateData.employeeNameEnglish);
-    // setValue("mobileNumber", stateData.mobileNumber);
-    // setValue("employeeNumber", stateData.employeeNumber);
+     setValue("issueDate", stateData.issueDate?new Date(stateData.issueDate as Date):undefined);
+     setValue("expiryDate", stateData.expiryDate?new Date(stateData.expiryDate as Date):undefined);
+     setValue("residencyExpiryDate", stateData.residencyExpiryDate?new Date(stateData.residencyExpiryDate as Date):undefined);
+     setValue("address", stateData.address);
+
     if(Nationalities!==undefined ) 
     {
       setValue("selectedNationality", (Nationalities as SelectOptions[]).find(j => j.value === stateData.nationalityId));
