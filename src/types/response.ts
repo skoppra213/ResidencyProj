@@ -1,6 +1,6 @@
-export type Response ={
-    status:number,
-    message:string,
-    response:any,
-    hasError:boolean
+export interface IResponse {
+    status?:number,
+    message?:string,
+    response?:any,
+    hasError?:boolean
 };

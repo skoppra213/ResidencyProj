@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import Layout from "../components/Layout";
 import ReactDatePicker from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { useForm, Controller } from "react-hook-form";
@@ -12,7 +13,8 @@ import { assignToType} from "../../Services/utils/assignType";
 import {getCreateRequest,getFetchRequest,getUpdateRequest as updatePassportInfo} from "../../State/passportInfo";
 import {getNationalitiesRequest} from "../../State/lookUps";
 import { getFetchIncompleteRequest,getUpdateRequest } from "../../State/newApp";
-import {Steps} from "../../types/Enums"
+import {Steps,ErrorMessages} from "../../types/Enums"
+import { useHistory } from "react-router-dom";
 
 
 export interface IFormData extends IState {
@@ -40,13 +42,15 @@ class TempClass implements IState{
 const PassportInfo = () => {
 
 
-
+  const history = useHistory();
   const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
   const newAppState = useSelector<RootState, RootState["newApp"]>(state => state.newApp);
   const loginData = useSelector<RootState, RootState["login"]>(state => state.login);
   const stateData = useSelector<RootState,RootState["passportInfo"]>(state => state.passportInfo);
   const {Nationalities} = LookUpState;
   const { userInfo } = loginData;
+  const [startDate, setStartDate] = useState(new Date());
+  const [Direction, setDirection] = useState<string>("");
 
   let dispatch = useDispatch();
   const { register, handleSubmit, watch, errors,setValue, getValues,control } = useForm<IFormData>({
@@ -56,6 +60,8 @@ const PassportInfo = () => {
 
     }
   });
+
+  console.log("errors",errors);
   useEffect(() => {
     const GetDropdownValues = async () => {
       if (Nationalities === undefined) {
@@ -67,18 +73,18 @@ const PassportInfo = () => {
   }, []);
 
   useEffect(() => {
-    if (newAppState.applicationNumber === undefined) {
+    if (newAppState.IState.applicationNumber === undefined) {
        dispatch(getFetchIncompleteRequest(userInfo?.userId as number));
     }
   }, []);
 
   useEffect(() => {
     console.log("in useeffect/newAppState.stepNo");
-    if (newAppState.stepNo as number  >= Steps.PassportInfo) {
-       dispatch(getFetchRequest(newAppState.applicationNumber as number));
+    if (newAppState.IState.stepNo as number  >= Steps.PassportInfo) {
+       dispatch(getFetchRequest(newAppState.IState.applicationNumber as number));
        console.log("in useeffect/newAppState.stepNo")
    }
-  }, [newAppState.stepNo]);
+  }, [newAppState.IState.stepNo]);
 
 
   useEffect(() => {
@@ -107,8 +113,8 @@ const PassportInfo = () => {
     console.log("res on submit",res);
     res.nationalityId=data.selectedNationality?.value;
     res.issueCountry = data.selectedIssueCountry?.value;
-    res.applicationNumber=newAppState.applicationNumber;;
-    res.userId=newAppState.userId;
+    res.applicationNumber=newAppState.IState.applicationNumber;;
+    res.userId=newAppState.IState.userId;
     res.civilID = userInfo?.civilId?Number(userInfo?.civilId):undefined;
 
 
@@ -117,17 +123,24 @@ const PassportInfo = () => {
     {
       res.createdDate = new Date();
       dispatch(getCreateRequest(res));
-      newAppState.stepNo =Steps.PassportInfo;
-      dispatch(getUpdateRequest(newAppState));
+      newAppState.IState.stepNo =Steps.PassportInfo;
+      dispatch(getUpdateRequest(newAppState.IState));
     }
    else{
      res.id = stateData.id;
      dispatch(updatePassportInfo(res));
    }
+   if(Direction=="fwd")
+   {
+   history.push("/fileAttachements");
+   }
+   else if(Direction=="bwd")
+   {
+    history.push("/personalinfo");
+   }
 
   }
     return (
-        <Layout>
         <main className="login-bg">
         <div className="container" style={{marginBottom: '80px'}}>
           {/* Outer Row */}
@@ -165,9 +178,13 @@ const PassportInfo = () => {
                                   name="selectedNationality"
                                   control={control}
                                   placeholder=" اختر الادار  "
+                                  rules={{
+                                    required: true  }}
                                   options={Nationalities}
                                   as={Select}
                                 />
+                                      {errors?.selectedNationality !==undefined && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                           </div>
                           {/* ################### form- row-003 #################*/}
@@ -175,7 +192,9 @@ const PassportInfo = () => {
                             <label  className="col-sm-3 col-form-label">رقم الجواز</label>
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user"  
-                              name="passportNumber" ref={register} />
+                              name="passportNumber"  ref={register({ required: true})} />
+                                 {errors?.passportNumber?.type==="required" && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                             <label  className="col-sm-3 col-form-label">مكان الاصدار</label>
                             <div className="col-sm-3">
@@ -185,8 +204,12 @@ const PassportInfo = () => {
                                   control={control}
                                   placeholder=" اختر الادار  "
                                   options={Nationalities}
+                                  rules={{
+                                    required: true  }}
                                   as={Select}
                                 />
+                                 {errors?.selectedIssueCountry !==undefined && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                           </div>
                           {/* ################### form- row-004 #################*/}
@@ -196,17 +219,23 @@ const PassportInfo = () => {
                             <Controller
                                   control={control}
                                   name="issueDate"
+                                  rules={{
+                                    required: true  }}
                                   render={({ onChange, onBlur, value }) => (
                                     <ReactDatePicker
                                       onChange={onChange}
+                                      maxDate={new Date()}
                                       onBlur={onBlur}
                                       selected={value}
                                       dateFormat="dd/MM/yyyy"
                                       placeholderText="dd/MM/yyyy "   
                                       className="form-control form-control-user"
                                     />
+                     
                                   )}
                                 />
+                                {errors?.issueDate !==undefined && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
 
                             </div>
                             <label  className="col-sm-3 col-form-label">تاريخ الانتهاء</label>
@@ -214,9 +243,12 @@ const PassportInfo = () => {
                             <Controller
                                   control={control}
                                   name="expiryDate"
+                                  rules={{
+                                    required: true  }}
                                   render={({ onChange, onBlur, value }) => (
                                     <ReactDatePicker
                                       onChange={onChange}
+                                      maxDate={new Date()}
                                       onBlur={onBlur}
                                       selected={value}
                                       dateFormat="dd/MM/yyyy"
@@ -225,6 +257,8 @@ const PassportInfo = () => {
                                     />
                                   )}
                                 />
+                                {errors?.expiryDate !==undefined && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                            
                           </div>
@@ -233,17 +267,22 @@ const PassportInfo = () => {
                             <label  className="col-sm-3 col-form-label">عنوان السكن</label>
                             <div className="col-sm-3">
                               <input type="text" className="form-control form-control-user"  
-                              name="address" ref={register} />
+                              name="address" ref={register({ required: true})} />
+                                   {errors?.address?.type==="required" && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                             <label  className="col-sm-3 col-form-label">تاريخ انتهاء الاقامة</label>
                             <div className="col-sm-3">
                             <Controller
                                   control={control}
                                   name="residencyExpiryDate"
+                                  rules={{
+                                    required: true  }}
                                   render={({ onChange, onBlur, value }) => (
                                     <ReactDatePicker
                                       onChange={onChange}
                                       onBlur={onBlur}
+                                      maxDate={new Date()}
                                       selected={value}
                                       dateFormat="dd/MM/yyyy"
                                       placeholderText="dd/MM/yyyy "   
@@ -251,17 +290,24 @@ const PassportInfo = () => {
                                     />
                                   )}
                                 />
+                                    {errors?.residencyExpiryDate !==undefined && 
+                                 <span className="text-danger">{ErrorMessages.required}</span>  }
                             </div>
                           </div>
                           {/* ################### form- row-006 #################*/}
                           {/* ################# submit btn ##################### */}
-                          <div className="row justify-content-between">
-                             <button type="submit" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
-                              السابق
+                          <div  className="row justify-content-between"> 
+                          <button type="submit" className="btn btn-primary btn-user shorooq  " onClick={()=> {setDirection("bwd");  }} style={{ fontSize: '22px' }}>
+                          
+                          <a   className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
+                            السابق
+                            </a>
                             </button>
-                            <button type="submit" className="btn btn-primary btn-user shorooq  " style={{fontSize: '22px'}}>
-                              التالي
-                            </button >
+
+                            <button type="submit" className="btn btn-primary btn-user shorooq  " onClick={()=> {setDirection("fwd");  }} style={{ fontSize: '22px' }}>
+                            <a  className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>التالي
+                          </a>
+                            </button>
                           </div>
                           {/* ################# end submit btn ##################### */}
                         </form>
@@ -272,8 +318,8 @@ const PassportInfo = () => {
               </div>
             </div>
           </div>
-        </div></main>
-         </Layout>
+        </div>
+        </main>
        
     )
 }

@@ -2,16 +2,18 @@
 export class UserInfo {
     userId: number = 0;
     mobileNumber?: string;
-    email: string = "";
+    email?: string = "";
     residencyByMoa: boolean = false;
     isSapUser: boolean = false;
     civilId: string = "";
+    civilIdSerialNumber?: string = "";
     employeeNumber?: string;
     employeeName: string = "";
     employeeType?: string;
     sector?: string;
     department?: string;
     section?: string;
+    nationalityId?: string ;
     nationality: string = "";
     birthDate?: Date;
     hireDate?: Date;
@@ -19,6 +21,7 @@ export class UserInfo {
     organization?: string;
     userTypeId: number = 0;
     registrationStatusId: number = 0;
+    isAdmin:boolean=false;
 }
 
 interface AuthenticateResult {

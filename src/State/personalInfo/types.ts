@@ -1,8 +1,18 @@
 import {IPersonalInfo} from "../../types";
 
-export interface IState extends IPersonalInfo{
+ interface IState extends IPersonalInfo{
 
 }
+
+export type{
+    IState
+};
+
+export const RequestClear = 'PERSONALINFO/CLEAR';
+export interface RequestClearActionType {
+    type: typeof RequestClear
+}
+
 
 export const CreateRequest = 'PERSONALINFO/CREATE';
 export interface CreateRequestActionType {
@@ -43,7 +53,8 @@ export interface UpdateSuccessActionType {
 
 export type NewAppActionsTypes = CreateRequestActionType | CreateSuccessActionType |
                                     FetchActionType | FetchSuccessActionType |
-                                    UpdateActionType | UpdateSuccessActionType;
+                                    UpdateActionType | UpdateSuccessActionType|
+                                    RequestClearActionType;
 
 
 

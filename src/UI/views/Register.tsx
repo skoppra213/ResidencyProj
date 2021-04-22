@@ -10,7 +10,7 @@ import {assignToSelectType, assignToType} from "../../Services/utils/assignType"
 import ModalInfo, {PropsModal} from '../components/ModalInfo';
 import {SelectOptions} from "../../types/UIRelated";
 import {RegisterNonSapUser}from "../../Services/register";
-import {Response } from "../../types/response";
+import {IResponse as Response} from "../../types";
 
 
 
@@ -46,7 +46,7 @@ const Register2 = () => {
     arg.password = temp.password;
     arg.civilId= temp.civilId;
     arg.employeeName= temp.employeeName;
-    arg.nationalityId = temp.nationalityId?.value;
+    arg.nationalityId = temp.selectedNationality?.value;
     arg.jobTitle = temp.jobTitle;
     arg.userTypeId = temp.userTypeId?.value;
     arg.employeeType="temp Data";//TODO
@@ -60,7 +60,7 @@ const Register2 = () => {
     if (a.status ){
       let tempModal = {...propsModal}
       tempModal.show = true;
-      tempModal.modalBody=a.message;
+      tempModal.modalBody=a.message as string;
       tempModal.modalTitle="Info"
       setpropsModal({...tempModal});
     }
@@ -116,7 +116,10 @@ const Register2 = () => {
                           </div>
                           <label htmlFor="" className="col-sm-2 col-form-label">الرقم المسلسل</label>
                           <div className="col-sm-4">
-                            <input type="text" className="form-control form-control-user" />
+                            <input type="text" name="civilIdSerialNumber" className="form-control form-control-user" 
+                            ref={register({ required: true})}/>
+                             {errors?.civilIdSerialNumber?.type==="required" && 
+                             <span className="text-danger">CivilIdSerialNumber is required</span>  }
                           </div>
                         </div>
                         {/* ################### form- row-002 #################*/}
@@ -148,10 +151,10 @@ const Register2 = () => {
                           <div className="col-sm-4">
                             <input name="organization" type="text" className="form-control form-control-user" ref={register} />
                           </div>
-                          <label htmlFor="nationalityId" className="col-sm-2 col-form-label">الجنسية</label>
+                          <label htmlFor="selectedNationality" className="col-sm-2 col-form-label">الجنسية</label>
                           <div className="col-sm-4">
                             <Controller
-                                name="nationalityId"
+                                name="selectedNationality"
                                 control={control}
                                 placeholder=" اختر الدولة "
                                 options={nationalities}

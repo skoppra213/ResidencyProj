@@ -28,16 +28,28 @@ export interface nationalities_Success__action_type {
     payload:SelectOptions[]
 }
 
+export const UserTypes_request = 'LOOKUP/USERTYPES_REQUEST';
+export interface UserTypes_request_action_type {
+    type: typeof UserTypes_request   
+}
+
+export const UserTypes_Success = 'LOOKUP/USERTYPES_SUCCESS';
+export interface UserTypes_Success__action_type {
+    type: typeof UserTypes_Success
+    payload:SelectOptions[]
+}
+
 export interface ILookUpState {
     IsLoading:boolean,
     AppTypes?:SelectOptions[],
-    Nationalities?:SelectOptions[]
-    
+    Nationalities?:SelectOptions[],
+    UserTypes?:SelectOptions[]   
 }
 
 export type LoadingActionType = loading_action_type;
 export type AppTypesActionsTypes = appTypes_request_action_type|appTypes_Success__action_type;
 export type NationalitiesActionsTypes = nationalities_request_action_type|nationalities_Success__action_type;
+export type UserTypesActionsTypes = UserTypes_request_action_type|UserTypes_Success__action_type;
 
-
-export type LookUpActionTypes = LoadingActionType|AppTypesActionsTypes|NationalitiesActionsTypes;
+export type LookUpActionTypes = LoadingActionType|AppTypesActionsTypes|
+                                NationalitiesActionsTypes|UserTypesActionsTypes;

@@ -9,7 +9,7 @@ import './assets/fonts/webfonts.css';
 import { Provider } from 'react-redux';
 import configureStore from './State/store';
  
-const store = configureStore();
+export const store = configureStore();
 ReactDOM.render(
   <>
      <Provider store={store}>

@@ -14,19 +14,41 @@ function* onLoginRequest({ type, payload  }: actionTypes.login_request_action_ty
     try {
       yield put(setLoading(true));
       const  loginRes:AuthenticateResponse  = yield call(login, username, password);
+         if(!loginRes.hasError)
+     {
       loginRes.isLoggedIn = true;
+      console.log("loginRes",loginRes);
       localStorage.setItem("user", JSON.stringify(loginRes));
       let tempState : actionTypes.AuthState ={
         isLoading:false,
         jwtToken:loginRes.response.jwtToken,
         userInfo:loginRes.response.userInfo,
-        isLoggedIn:true
+        isLoggedIn:true,
+        hasError:false,
+        message:""
       }
+      
       yield put(getloginSuccess(tempState));
-      yield put(setLoading(false));
+    }
+    else
+      {
+        loginRes.isLoggedIn = false;
+        localStorage.setItem("user", JSON.stringify(loginRes));
+        let tempState : actionTypes.AuthState ={
+          isLoading:false,
+          jwtToken:undefined,
+          userInfo:undefined,
+          isLoggedIn:false,
+          hasError:true,
+          message:loginRes.message
+        }
+      yield put(getloginSuccess(tempState));
 
+      }
+      yield put(setLoading(false));
        
     } catch (error) {
+      yield put(setLoading(false));
 
     }
   }

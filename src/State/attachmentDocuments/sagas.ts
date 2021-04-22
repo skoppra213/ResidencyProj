@@ -39,6 +39,7 @@ function* watchOnAttachmentInfo() {
   yield takeEvery(actionTypes.CreateRequest, onCreateRequest);
   yield takeEvery(actionTypes.FetchRequest, onFetchRequest);
   yield takeEvery(actionTypes.UpdateRequest, onUpdateRequest);
+
 }
 
 export default function* attachmentInfoSaga() {

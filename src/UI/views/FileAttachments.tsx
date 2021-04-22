@@ -19,37 +19,39 @@ type TempFormData = {
 }
 
 function FileAttachments() {
-    const LookUpState = useSelector<RootState, RootState["lookUp"]>(state => state.lookUp);
     const newAppState = useSelector<RootState, RootState["newApp"]>(state => state.newApp);
     const loginData = useSelector<RootState, RootState["login"]>(state => state.login);
     const stateData = useSelector<RootState,RootState["attachmentInfo"]>(state => state.attachmentInfo);
     const { register, handleSubmit, watch, errors, setValue, getValues, control } = useForm<IState>();
+    const history = useHistory();
     const {userInfo} = loginData;
-    const [removeletter, setRemoveletter] = useState(false);
-    const [removeSalary, setremoveSalary] = useState(false);
-    const [removeCivilId, setremoveCivilId] = useState(false);
-    const [removePassport, setremovePassport] = useState(false);
-    const [removeOtherDocs, setRemoveOtherDocs] = useState(false);
+    const [removeletter, setRemoveletter] = useState(true);
+    const [removeSalary, setremoveSalary] = useState(true);
+    const [removeCivilId, setremoveCivilId] = useState(true);
+    const [removePassport, setremovePassport] = useState(true);
+    const [removeOtherDocs, setRemoveOtherDocs] = useState(true);
+    const [Direction, setDirection] = useState<string>("");
 
     let dispatch = useDispatch();
 
     useEffect(() => {
-        if (newAppState.applicationNumber === undefined) {
+        if (newAppState.IState.applicationNumber === undefined) {
            dispatch(getFetchIncompleteRequest(userInfo?.userId as number));
         }
       }, []);
 
       useEffect(() => {
         console.log("in useeffect/newAppState.stepNo out");
-        if (newAppState.stepNo as number  >= Steps.Attachments) {
-            dispatch(fetchAttachment(newAppState.applicationNumber as number));
+        if (newAppState.IState.stepNo as number  >= Steps.Attachments) {
+            dispatch(fetchAttachment(newAppState.IState.applicationNumber as number));
             console.log("in useeffect/newAppState.stepNo");
        }
-      }, [newAppState.stepNo]);
+      }, [newAppState.IState.stepNo]);
 
       useEffect(() => {
-        console.log("in useeffect/newAppState.stepNo out");
-       if (stateData.approvedLetterForResidencyRenewal) setRemoveletter(false);
+          console.log("in use Effec t");
+       if (stateData.approvedLetterForResidencyRenewal)
+       {console.log("approvedLetterForResidencyRenewal");setRemoveletter(false);} 
        if (stateData.salaryCertification) setremoveSalary(false);
        if (stateData.civilIdCopy) setremoveCivilId(false);
        if (stateData.passportCopy) setremovePassport(false);
@@ -58,12 +60,10 @@ function FileAttachments() {
       }, [stateData]);
 
     const onSubmit = async (data: TempFormData) => {
-        console.log("formData", data);
 
         const postData: IFileAttachment = {};
-        postData.ApplicationNumber = newAppState.applicationNumber;
+        postData.ApplicationNumber = newAppState.IState.applicationNumber;
         postData.UserId = userInfo?.userId;
-
 
         if(stateData.id ===undefined ||stateData.id===0)
         {
@@ -75,11 +75,13 @@ function FileAttachments() {
           postData.OtherRelatedDocuments = data.OtherRelatedDocuments[0];
           console.log("postData", postData);
           dispatch(getCreateRequest(postData));
-          newAppState.stepNo =Steps.Attachments;
-          dispatch(getUpdateRequest(newAppState));
+          newAppState.IState.stepNo =Steps.Attachments;
+          dispatch(getUpdateRequest(newAppState.IState));
+         
         }
        else
        {
+        postData.id = stateData.id;
         if (data.ApprovedLetterForResidencyRenewal.length>0)
          postData.ApprovedLetterForResidencyRenewal = data.ApprovedLetterForResidencyRenewal[0];
          if (data.SalaryCertification.length>0)
@@ -92,13 +94,20 @@ function FileAttachments() {
          postData.OtherRelatedDocuments = data.OtherRelatedDocuments[0];
          console.log("postData",postData);
          dispatch(updateAttachment(postData));
+        
+       }
+       if(Direction=="fwd")
+       {
+       history.push("/Agreament");
 
        }
-
-
+       else if(Direction=="bwd")
+       {
+       history.push("/passportinfo");
+       }
     }
     return (
-        <Layout>
+
             <main className="login-bg">
                 <div className="container" style={{ marginBottom: '80px' }}>
                     {/* Outer Row */}
@@ -205,14 +214,19 @@ function FileAttachments() {
                                                         </div>
                                                     </div>
                                                     {/* ################# submit btn ##################### */}
-                                                    <div className="row justify-content-between">
-                                                        <a href="001-002.html" className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
-                                                            السابق
+                                                    <div  className="row justify-content-between"> 
+                          <button type="submit" className="btn btn-primary btn-user shorooq  " onClick={()=> {setDirection("bwd");  }} style={{ fontSize: '22px' }}>
+                          
+                          <a   className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
+                            السابق
                             </a>
-                                                        <button type="submit" className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>
-                                                            التالي
                             </button>
-                                                    </div>
+
+                            <button type="submit" className="btn btn-primary btn-user shorooq  " onClick={()=> {setDirection("fwd");  }} style={{ fontSize: '22px' }}>
+                            <a  className="btn btn-primary btn-user shorooq  " style={{ fontSize: '22px' }}>التالي
+                          </a>
+                            </button>
+                          </div>
                                                     {/* ################# end submit btn ##################### */}
                                                 </form>
                                             </div>
@@ -223,7 +237,7 @@ function FileAttachments() {
                         </div>
                     </div>
                 </div></main>
-        </Layout>
+
     )
 }
 

@@ -15,17 +15,17 @@ export const getNationalities = async ():Promise<Nationality[]> =>{
       return nationalities;
 }
 
-export const getUserTypes = async ():Promise<UserType[]> =>{
-    let response = await fetch(GET_USERTYPES, { 
-        headers: {
-          'Content-Type': 'application/json'
-        }      
-      });
-      let data = await response.json();     
-      let userTypes = new Array<UserType>();
-      userTypes = assignToTypeArray<UserType>(data, new UserType(),userTypes);
-      return userTypes;
-}
+// export const getUserTypes = async ():Promise<UserType[]> =>{
+//     let response = await fetch(GET_USERTYPES, { 
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }      
+//       });
+//       let data = await response.json();     
+//       let userTypes = new Array<UserType>();
+//       userTypes = assignToTypeArray<UserType>(data, new UserType(),userTypes);
+//       return userTypes;
+// }
 
 export const getAppTypes = async ():Promise<SelectOptions[]> =>{
   let response = await fetch(GET_APPTYPES, { 
@@ -41,6 +41,16 @@ export const getAppTypes = async ():Promise<SelectOptions[]> =>{
 
 export const getNations = async ():Promise<SelectOptions[]> =>{
   let response = await fetch(GET_NATIONALITIES, { 
+      headers: {
+        'Content-Type': 'application/json'
+      }      
+    });
+    let res:SelectOptions[] = await response.json();     
+    return res;
+}
+
+export const getUserTypes = async ():Promise<SelectOptions[]> =>{
+  let response = await fetch(GET_USERTYPES, { 
       headers: {
         'Content-Type': 'application/json'
       }      

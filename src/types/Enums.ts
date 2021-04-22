@@ -11,10 +11,19 @@ export enum Steps {
     RequestSent = 5
 }
 
-export enum AttachmentTypes {
-    ApprovalLetter=1,
-    SalaryCertificare=2,
-    CivilIdCopy=3,
-    PassportCopy=4,
-    OtherDocs=5
+
+export enum StatusType {
+    	Approved=1,
+    	Rejected=2,
+    	Return=3,
+    	Pending=5,
+    	Creation=6,
+}
+
+
+export enum  ErrorMessages {
+    required="برجاء ادخال هدا الحقل",
+     Select="برجاء الاختيار",
+    MaxWidth="المساحة القسوى المسموح بها 1 ميجا بيت",
+
 }

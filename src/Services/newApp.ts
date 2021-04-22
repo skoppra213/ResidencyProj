@@ -56,6 +56,45 @@ export const createNewApp = async (data:IState): Promise<IState> => {
 
       });
       
+      console.log("response",response);
+      if (!response.ok) {
+        // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
+      }
+      let temp:IState = await response.json();
+       res = 
+              {
+               applicationDate:temp.applicationDate,
+               applicationNumber : temp.applicationNumber,
+               applicationStatusId:temp.applicationStatusId,
+               applicationTypeId:temp.applicationTypeId,
+               isActive:temp.isActive,
+               remark:temp.remark,
+               stepNo:temp.stepNo,
+               userId:temp.userId
+            }
+      return res;
+  
+    } catch (e) {
+      console.log("NET error incomp",e);
+      return res
+   
+    }
+  }  
+
+  export const getAppRequest = async (data:number): Promise<IState> => {
+
+    
+    let res :IState ={};
+    try {
+      let url = `${NEWAPP_UPDATE}${data}`;
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+      });
+      
       if (!response.ok) {
         // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
       }
@@ -122,3 +161,6 @@ export const createNewApp = async (data:IState): Promise<IState> => {
    
     }
   }  
+
+
+

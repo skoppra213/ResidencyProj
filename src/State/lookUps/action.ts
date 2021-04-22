@@ -33,3 +33,15 @@ export const getNationalitiesSuccess = (options: SelectOptions[]): lookUpActions
     }
 }
 
+export const getUserTypesRequest = ():lookUpActions.UserTypesActionsTypes=>{
+    return {
+        type:lookUpActions.UserTypes_request
+    }
+}
+
+export const getUserTypesSuccess = (options: SelectOptions[]): lookUpActions.UserTypesActionsTypes => {
+    return {
+        type: lookUpActions.UserTypes_Success,
+        payload: options
+    }
+}

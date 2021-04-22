@@ -1,4 +1,5 @@
 
+
 import {PASSPORT_INFO_CREATE,PASSPORT_INFO_FETCH_UPDATE } from "./Urls";
 import {IState} from "../State/passportInfo";
 
@@ -60,7 +61,6 @@ export const createPassportInfo = async (data:IState): Promise<IState> => {
   export const updatePassportInfo = async (data:IState): Promise<IState> => {
     let res :IState ={};
     try {
-      console.log("data",data);
       let url = `${PASSPORT_INFO_FETCH_UPDATE}${data.id}`;
       let response = await fetch(url, {
         method: 'PUT',

@@ -25,3 +25,9 @@ export const getllogout = ():loginActions.logout_action_type=>{
         type:loginActions.LOGOUT,
     }
 }
+export const changeProfile = (data:loginActions.IUserProfile):loginActions.profile_action_type=>{
+    return {
+        type:loginActions.PROFILECHANGE,
+        payload:data
+    }
+}

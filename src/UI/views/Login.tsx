@@ -7,7 +7,8 @@ import { getLocalStorage } from "../../Services/utils/localStorageHelper";
 import Layout from "../components/Layout";
 import { useSelector, useDispatch } from 'react-redux';
 import {RootState} from '../../State/rootReducer';
-import {getloginRequest} from "../../State/login"
+import {getloginRequest} from "../../State/login";
+import {RequestClearRequest} from "../../State/newApp";
 
 const Login = () => {
 	let userAuth = getLocalStorage("user", authenticateResponse);
@@ -33,12 +34,13 @@ const Login = () => {
 	const handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 		dispatch(getloginRequest({username,password}));
-		
+	    dispatch(RequestClearRequest());
+
+	
 		
 
 		/*if (username.trim() === "" || password.trim() === "") {
 			setIsFieldEmpty(true);
-
 			return;
 		}
 		setLoading(true);
@@ -110,6 +112,11 @@ const Login = () => {
 														<button className="btn btn-primary btn-user  shorooq " style={{ fontSize: '22px' }}> تسجيل الدخول الى النظام  </button>
 														<button  className="btn btn-info btn-user shorooq " style={{ fontSize: '22px' }} onClick={handleNewUser}> تسجيل مستخدم جديد </button>
 													</div>
+													{loginstate.hasError &&
+													<div className="alert alert-danger" role="alert">
+														يوجد خطا فى كلمه واسم المرور
+												</div>
+												}
 												</form>
 											</div>
 											<div className="col-lg-4 d-none d-lg-block text-center my-auto" style={{ backgroundColor: 'transparent' }}>
@@ -136,4 +143,3 @@ const Login = () => {
 };
 
 export default Login;
-

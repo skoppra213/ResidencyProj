@@ -3,19 +3,28 @@ import { Link } from 'react-router-dom';
 import { authenticateResponse } from '../../types/userInfo';
 import { getLocalStorage } from '../../Services/utils/localStorageHelper';
 import { useDispatch } from 'react-redux';
-import {getllogout} from "../../State/login"
-
+import {getllogout} from "../../State/login";
+import {ClearRequest} from "../../State/newApp";
+import {RequestClear as RequestClearPersonalInfo} from "../../State/personalInfo";
+import {RequestClear as RequestClearPassportInfo} from "../../State/passportInfo";
+import {RequestClear as RequestClearattachmentDocuments} from "../../State/attachmentDocuments";
+import { useHistory } from "react-router-dom";
 
 
 const Header = () => {
 
   const userAuth = getLocalStorage("user", authenticateResponse);
   let dispatch = useDispatch();
-
+  const history = useHistory();
 
   const logout = () => {
     localStorage.removeItem("user");
+
     dispatch(getllogout());
+    dispatch(ClearRequest());
+    dispatch(RequestClearPersonalInfo());
+    dispatch(RequestClearPassportInfo());
+    dispatch(RequestClearattachmentDocuments());
   }
 
 
@@ -36,9 +45,12 @@ const Header = () => {
               <li className="nav-item dropdown"> <a className="top-nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="fas fa-user fa-fw" />&nbsp;&nbsp; ملف المستخدم
               &nbsp;&nbsp;</a>
                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                  <button className="dropdown-item sb-nav-link-icon">
+                  {/* <button className="dropdown-item sb-nav-link-icon">
                     <i className="fas fa-angle-double-left" />&nbsp;&nbsp; الملف الشخصي
-                  </button>
+                  </button> */}
+                  <Link to="/profile" className="dropdown-item sb-nav-link-icon" onClick={()=>history.push("/profile")} >
+                    <i className="fas fa-angle-double-left" />&nbsp;&nbsp;  الملف الشخصي 
+                  </Link>
                   <Link to="/login" className="dropdown-item sb-nav-link-icon" onClick={logout} >
                     <i className="fas fa-angle-double-left" />&nbsp;&nbsp; تسجيل الخروج
                   </Link>

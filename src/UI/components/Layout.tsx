@@ -13,6 +13,8 @@ import '../../assets/js/all';
 
 const Layout: FC = ({ children }) => {
     const LookUpState = useSelector<RootState,RootState["lookUp"]>(state => state.lookUp);
+    const userData = useSelector<RootState,RootState["login"]>(state => state.login);
+
     const {IsLoading} = LookUpState;
 
 
@@ -24,10 +26,10 @@ const Layout: FC = ({ children }) => {
             <div id="layoutSidenav">
                 <SideMenu />
                 <div id="layoutSidenav_content">              
-                    {userAuth.isLoggedIn && 
+                    {userData.isLoggedIn && 
                     <AuthHeader loggedIn={userAuth.isLoggedIn} 
-                    fullName={ userAuth.response.userInfo.employeeName}
-                    civilId = {userAuth.response.userInfo.civilId} />}
+                    fullName={ userData?.userInfo?.employeeName!=undefined?userData?.userInfo?.employeeName:""}
+                    civilId = { userData?.userInfo?.civilId!=undefined?userData?.userInfo?.civilId:""} />}
                     {children}
                 </div>
             </div>

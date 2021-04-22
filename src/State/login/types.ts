@@ -1,5 +1,6 @@
 import { UserInfo } from "../../types/userInfo";
-
+import {IUserProfile} from '../../types'
+export type {IUserProfile};
 export type credentials={
     username: string, 
     password: string
@@ -28,15 +29,24 @@ export interface logout_action_type {
     type: typeof LOGOUT,
 }
 
+export const PROFILECHANGE = 'PROFILECHANGE';
+export interface profile_action_type {
+    type: typeof PROFILECHANGE,
+    payload:IUserProfile 
+}
+
 export interface AuthState {
     isLoading:boolean,
     isLoggedIn: boolean,
     jwtToken?:string,
-    userInfo?:UserInfo
+    userInfo?:UserInfo,
+    hasError?:Boolean,
+    message?:string
   }
 
 export type LoginActionTypes = login_request_action_type|
                                login_success_action_type|
                                login_loading_action_type|
+                               profile_action_type|
                                logout_action_type;
 

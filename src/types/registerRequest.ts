@@ -11,7 +11,7 @@ export class RegisterRequest {
     organization: string = "";
     mobileNumber: string = "";
     employeeNumber: string = "";
-
+    civilIdSerialNumber: string = "";
 }
 
 export class RegisterRequestModel {
@@ -19,8 +19,9 @@ export class RegisterRequestModel {
     password: string = "";
     password_repeat: string = "";
     civilId: string = "";
+    civilIdSerialNumber: string = "";
     employeeName: string = "";
-    nationalityId?: SelectOptions|undefined = new SelectOptions();
+    selectedNationality?: SelectOptions|undefined = new SelectOptions();
     jobTitle: string = "";
     userTypeId?:SelectOptions|undefined;
     employeeType?: string = "";

@@ -7,6 +7,14 @@ export interface IState extends IAttachment{
 export type {
     IFileAttachment
 } ;
+
+
+export const RequestClear = 'ATTACHMENT/REQUESTCLEAR';
+export interface RequestClearActionType {
+    type: typeof RequestClear
+}
+
+
 export const CreateRequest = 'ATTACHMENT/CREATE';
 export interface CreateRequestActionType {
     type: typeof CreateRequest,
@@ -46,7 +54,8 @@ export interface UpdateSuccessActionType {
 
 export type ActionsTypes = CreateRequestActionType | CreateSuccessActionType |
                                     FetchActionType | FetchSuccessActionType |
-                                    UpdateActionType | UpdateSuccessActionType;
+                                    UpdateActionType | UpdateSuccessActionType|
+                                    RequestClearActionType;
 
 
 

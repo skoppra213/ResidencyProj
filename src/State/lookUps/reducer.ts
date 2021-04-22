@@ -2,6 +2,7 @@ import {
     Loading,
     AppTypes_Success,
     Nationalities_Success,
+    UserTypes_Success,
     LookUpActionTypes,
     ILookUpState
   } from './types';
@@ -10,6 +11,7 @@ import {
   const initialState: ILookUpState = {
     AppTypes:undefined,
     Nationalities:undefined,
+    UserTypes:undefined,
     IsLoading:false
   }
 
@@ -32,7 +34,11 @@ export function lookUpReducer(state: ILookUpState = initialState,
         ...state,
         Nationalities: [...action.payload]
       }
-
+      case UserTypes_Success:
+        return {
+          ...state,
+          UserTypes: [...action.payload]
+        }
 
     default:
       return state

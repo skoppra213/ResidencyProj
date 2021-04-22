@@ -24,7 +24,6 @@ function* onFetchRequest({ type,payload }: actionTypes.FetchActionType) {
 
 function* onUpdateRequest({ type,payload }: actionTypes.UpdateActionType) {
   try {
-
      let res: actionTypes.IState = yield call(updatePassportInfo, payload);
      yield put(actions.getUpdateSuccess(res));
   } catch (error) {
@@ -33,10 +32,13 @@ function* onUpdateRequest({ type,payload }: actionTypes.UpdateActionType) {
 }
 
 
+
+
 function* watchOnPassportInfo() {
   yield takeEvery(actionTypes.CreateRequest, onPassportInfoRequest);
   yield takeEvery(actionTypes.FetchRequest, onFetchRequest);
   yield takeEvery(actionTypes.UpdateRequest, onUpdateRequest);
+
 }
 
 export default function* passportInfoSaga() {

@@ -16,7 +16,7 @@ export const createPersonalInfo = async (data:IState): Promise<IState> => {
         })
       });
       if (!response.ok) {
-        // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
+
       }
       let temp:IState = await response.json();
 
@@ -24,7 +24,6 @@ export const createPersonalInfo = async (data:IState): Promise<IState> => {
     } catch (e) {
       console.log("NET error");
       return data
-    //   return { ...authenticateResponse, status: 500, message: e, hasError: true }
     }
   }
 
