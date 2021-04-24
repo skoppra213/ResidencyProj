@@ -6,8 +6,9 @@ import FullPageLoader from './FullPageLoader';
 import { getLocalStorage } from '../../Services/utils/localStorageHelper';
 import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "../../State/rootReducer";
-
 import { authenticateResponse } from '../../types/userInfo';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../../assets/js/all';
 
 
@@ -34,6 +35,7 @@ const Layout: FC = ({ children }) => {
                 </div>
             </div>
             { IsLoading && <FullPageLoader />}
+            <ToastContainer position="top-left" rtl={true}/>
         </>
     )
 }

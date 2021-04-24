@@ -162,5 +162,36 @@ export const createNewApp = async (data:IState): Promise<IState> => {
     }
   }  
 
+  export const updateNewAppStatus = async (data:any): Promise<any> => {
+
+    
+    let res :IState ={};
+    try {
+      let url = `${NEWAPP_UPDATE}${data.userId}/${data.applicationNumber}/${data.statusId}?Remark=N'${data.remark}'`;
+      let response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...data
+         })
+
+      });
+      
+      if (!response.ok) {
+        // return { ...authenticateResponse, status: response.status, message: response.statusText, hasError: true }
+      }
+      let temp:any = await response.json();
+     
+    console.log("in UpdateNewApp service",res,temp)
+      return temp;
+  
+    } catch (e) {
+      console.log("NET error UpdateNewApp",e);
+      return res
+   
+    }
+  } 
 
 

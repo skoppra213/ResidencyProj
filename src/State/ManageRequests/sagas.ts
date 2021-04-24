@@ -3,7 +3,7 @@ import * as ManageRequestsTypes from "./types";
 import * as ManageRequestsActions from "./actions";
 import * as ManageRequestsActionsTypes from "./types";
 import * as api from "./api";
-import { createNewApp } from "../../Services/newApp";
+import { createNewApp,updateNewAppStatus } from "../../Services/newApp";
 function* ManageRequest({type,payload}:ManageRequestsTypes.ManageRequestsCREATE) {
     try {
       let res: ManageRequestsTypes.IRequests[] = yield call(api.GetUserApplicationsByUserId, payload);
@@ -32,9 +32,39 @@ function* ManageRequest({type,payload}:ManageRequestsTypes.ManageRequestsCREATE)
   }
   
   function* watchOnManageRequestAdmin() {
-    yield takeEvery(ManageRequestsActionsTypes.CreateRequestAdmin, ManageRequest);
+    yield takeEvery(ManageRequestsActionsTypes.CreateRequestAdmin, ManageRequestAdmin);
   }
   
+  
+  function* ManageRequestAdminOutwardApplications({type}:ManageRequestsTypes.ManageRequestsAdminOutwardApplications) {
+    try {
+      let res: ManageRequestsTypes.IRequests[] = yield call(api.GetUserApplicationsAdminOutward);
+     yield put(ManageRequestsActions.RequestSuccess(res));
+    }
+     catch (error) 
+     {
+
+    }
+  }
+  
+  function* watchOnManageRequestAdminOutwardApplications() {
+    yield takeEvery(ManageRequestsActionsTypes.CreateRequestAdminOutwardApplications, ManageRequestAdminOutwardApplications);
+  }
+
+  function* ManageRequestAdminInwardSearch({type}:ManageRequestsTypes.ManageRequestsAdminInwardSearch) {
+    try {
+      let res: ManageRequestsTypes.IRequests[] = yield call(api.GetUserApplicationsAdmin);
+     yield put(ManageRequestsActions.RequestSuccess(res));
+    }
+     catch (error) 
+     {
+
+    }
+  }
+  
+  function* watchOnManageRequestAdminInwardSearch() {
+    yield takeEvery(ManageRequestsActionsTypes.CreateRequestAdminInwardSearch, ManageRequestAdminInwardSearch);
+  }
 
   function* SelectedRequest({type,payload}:ManageRequestsTypes.ManageSelectedRequest) {
     try {
@@ -51,23 +81,38 @@ function* ManageRequest({type,payload}:ManageRequestsTypes.ManageRequestsCREATE)
   }
   
 
+function* onApplicationStatusRequst({ type,PAYLOAD }: ManageRequestsTypes.ApplicationStatusUpdateRequstType) {
+  try {
+    let res: ManageRequestsTypes.IApplicationStatusUpdateRequst = yield call(updateNewAppStatus, PAYLOAD);
+   
+    yield put(ManageRequestsActions.ApplicationStatusUpdate(res));
+  } 
+  catch (error) {
 
-  function* DeleteRequest({type,payload}:ManageRequestsTypes.ManageSelectedRequest) {
-    try {
-      let res: ManageRequestsTypes.IRequests[] = yield call(api.GetUserApplicationsByUserId, payload);
-      yield put(ManageRequestsActions.RequestSuccess(res));
-    } catch (error) {
-  
-    }
   }
-  
-  
-  function* watchOnDeleteRequest() {
-    yield takeEvery(ManageRequestsActionsTypes.DeleteRequest, DeleteRequest);
+}
+
+
+function* watchonApplicationStatusRequst() {
+  yield takeEvery(ManageRequestsTypes.ApplicationStatusRequst, onApplicationStatusRequst);
+
+}
+
+
+
+function* onClearAppRequest({ type }: ManageRequestsTypes.ClearRequstActionType) {
+  try {
+    yield put(ManageRequestsActions.ClearRequest());
+  } catch (error) {
   }
-  
+}
 
 
+
+function* watchonClearAppRequest() {
+  yield takeEvery(ManageRequestsTypes.ClearRequst, onClearAppRequest);
+
+}
   export default function* ManageRequests() {
-    yield all([fork(watchOnManageRequest)]);
+    yield all([fork(watchOnManageRequest),fork(watchOnManageRequest),fork(watchonClearAppRequest),fork(watchOnManageRequestAdmin),fork(watchonApplicationStatusRequst),fork(watchOnManageRequestAdminOutwardApplications),fork(watchOnManageRequestAdminInwardSearch)]);
   }

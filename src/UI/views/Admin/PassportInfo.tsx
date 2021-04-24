@@ -15,6 +15,7 @@ import { getFetchIncompleteRequest,getUpdateRequest } from "../../../State/newAp
 import {Steps} from "../../../types/Enums"
 import { useHistory } from "react-router-dom";
 import {getFetchRequest as getFetchRequestPersonalInfo} from "../../../State/personalInfo";
+import {getFetchRequest as getFetchRequestFileAttachmentInfo} from "../../../State/attachmentDocuments";
 
 
 export interface IFormData extends IState {
@@ -105,8 +106,8 @@ const PassportInfo = () => {
   
   if(Direction=="fwd")
   {
-    // dispatch(getFetchRequestPassport(newAppState.IState?.applicationNumber as number));
-    // history.push("/admin/passportInfo");
+     dispatch(getFetchRequestFileAttachmentInfo(newAppState.IState?.applicationNumber as number));
+     history.push("/admin/FileAttachments");
   }
   else if(Direction=="bwd")
   {

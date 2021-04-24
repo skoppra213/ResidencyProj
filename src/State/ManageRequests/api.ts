@@ -40,8 +40,19 @@ export const GetUserApplicationsByUserId = (input:any) => {
 
 export const GetUserApplicationsAdmin = () => {
     //console.log("GetUserApplicationsByUserId api call ->", input);
-    return axios.get<any>(`https://localhost:44367/api/UserApplications/admin`);
+    return axios.get<any>(`https://localhost:44367/api/UserApplications/List`);
 }
+
+
+export const GetUserApplicationsAdminOutward = () => {
+    //console.log("GetUserApplicationsByUserId api call ->", input);
+    return axios.get<any>(`https://localhost:44367/api/UserApplications/List`);
+}
+export const GetUserApplicationsAdminInwardSearch = (data:any) => {
+    //console.log("GetUserApplicationsByUserId api call ->", input);
+    return axios.get<any>(`https://localhost:44367/api/UserApplications/SearchList?ApplicationNumber=${data.ApplicationNumber}&ApplicationTypeId=${data.ApplicationTypeId}&CivilId=${data.CivilId}&ApplicationStatusId=${data.ApplicationStatusId}&EmployeeName=${data.EmployeeName}&FromDate=${data.FromDate}&ToDate=${data.ToDate}`);
+}
+
 export const DeleteUserApplicationById = (id:any) => {
     //console.log("deletePost api call ->", id);
     return axios.delete(`${BaseUrl}/posts/${id}`, id);

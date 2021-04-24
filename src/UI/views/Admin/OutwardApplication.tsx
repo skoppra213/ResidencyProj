@@ -59,19 +59,6 @@ let columnsBootStrap_: columnsBootStrap={columns:[],data:null};
     {
         text: "عرض",
         formatter:(row:any,cell:any) => <button className="btn btn-primary btn-sm  rounded-circle"   onClick={()=>handleRowFunctionsref.current?.EditRowAdmin(cell)} ><i className="fas fa-eye"aria-hidden="true"/></button>
-    },
-    {
-        text: "اعتماد",
-        formatter:(row:any,cell:any) => <button className="btn btn-success btn-sm  rounded-circle"   onClick={()=>handleRowFunctionsref.current?.SubmitRow(cell)} ><i className="fa fa-check"aria-hidden="true"/></button>
-    },
-    {
-        text: "رفض",
-        formatter:(row:any,cell:any) => <button className="btn btn-danger btn-sm  rounded-circle"   onClick={()=>handleRowFunctionsref.current?.RejectRow(cell)} > <i className="fa fa-ban" aria-hidden="true"></i></button>
-    }
-    ,
-    {
-        text: "اعاده",
-        formatter:(row:any,cell:any) => <button className="btn btn-warning btn-sm  rounded-circle"   onClick={()=>handleRowFunctionsref.current?.ReturnRow(cell)} ><i className="fas fa-undo"aria-hidden="true"/></button>
     }
   ];
   console.log("IRequests",IRequests);
@@ -88,32 +75,6 @@ let columnsBootStrap_: columnsBootStrap={columns:[],data:null};
    },[RequestsState]);
 
 
-   React.useEffect(() => {
-    if(RequestsState.message!="")
-    {
-        setAlertVisible(true);
-    
-      if(RequestsState.hasError)
-      {
-        setAlertType("danger");
-      }else
-      {
-        setAlertType("success");
-      }
-      window.setTimeout(()=>{
-        setAlertVisible(false);
-      dispatch(actions.ClearMeassageError());
-
-
-      },2000)
-    }
-    else
-    {
-      setAlertVisible(false);
-    }
-  
-
-   }, [RequestsState.message]);
   return (
     <>
          <Alert color={alertType}isOpen={alertVisible} >

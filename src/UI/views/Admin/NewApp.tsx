@@ -10,7 +10,10 @@ import {getFetchIncompleteRequest} from "../../../State/newApp";
 import {getFetchRequest} from "../../../State/personalInfo";
 import {Steps} from "../../../types/Enums"
 import {INewAppState} from '../../../types/newApp'
-
+import {ClearRequest} from "../../../State/newApp"
+import {RequestClear as RequestClearPersonalInfo} from "../../../State/personalInfo"
+import {RequestClear as RequestClearPassportInfo} from "../../../State/passportInfo"
+import {RequestClear as RequestClearattachmentDocuments} from "../../../State/attachmentDocuments"
 
 
 
@@ -55,6 +58,10 @@ const NewApp: React.FunctionComponent<INewAppState> =() => {
     }
     else if(Direction=="bwd")
     {
+      dispatch(ClearRequest());
+      dispatch(RequestClearPersonalInfo());
+      dispatch(RequestClearPassportInfo());
+      dispatch(RequestClearattachmentDocuments());
       history.push("/admin/inwardApplication");
     }
 	}

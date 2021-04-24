@@ -15,9 +15,11 @@ const initialState:Types.IRequestsState={
          stepName:undefined,
          stepNo:undefined,
          userId:undefined,
-          UserName:undefined,
-          CivilId:undefined
-    }
+         userName:undefined,
+         civilId:undefined
+    },
+    message:"",
+    hasError:false
     
 }
 
@@ -25,10 +27,30 @@ const initialState:Types.IRequestsState={
  export  function ManageRequestsReducer(state:Types.IRequestsState=initialState,actions:Types.ManageRequestsActionsTypes):Types.IRequestsState
 {
          switch (actions.type) {
+          
+          case Types.ClearMeassageError:
+            localStorage.setItem("IRequestsState", JSON.stringify({ ...state,message:"",hasError:false}));
+            return {
+              ...state,
+              message:"",
+              hasError:false
+            }
+          case Types.Clear:
 
+        localStorage.removeItem("IRequestsState");
+           return {
+                ...initialState
+                  }
+           
+            case Types.ApplicationStatus:
+            localStorage.setItem("IRequestsState", JSON.stringify({ ...state,message:actions.payload.message,hasError:actions.payload.hasError}));
+            return {
+              ...state,
+              message:actions.payload.message,
+              hasError:actions.payload.hasError
+            }
                  case Types.RequestSuccess:
-                    var Dstate=state;
-                    Dstate.IRequests=actions.payload
+                    localStorage.removeItem("IRequestsState");
                     localStorage.setItem("IRequestsState", JSON.stringify({ ...state,IRequests:actions.payload ,SelectedRequest:initialState.SelectedRequest }));
                   return{
                     ...state,
