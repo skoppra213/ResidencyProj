@@ -15,5 +15,7 @@ export const PASSPORT_INFO_CREATE =`${BASEURL}/api/PassportInformation`;
 export const PASSPORT_INFO_FETCH_UPDATE = `${BASEURL}/api/PassportInformation/`;
 export const ATTACHMENT = `${BASEURL}/api/AttachmentDocument`;
 export const CHANGEPROFILE = `${BASEURL}/api/Users/changeProfile`;
+export const APPLICATIONTYPES = `${BASEURL}/api/ApplicationTypes`;
+
 
 

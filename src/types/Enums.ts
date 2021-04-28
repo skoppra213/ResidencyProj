@@ -11,6 +11,13 @@ export enum Steps {
     RequestSent = 5
 }
 
+export enum ApplicationTypes {
+    ResidencyRenewal = 1,
+    InformationTransfer = 2,
+    UpdateData = 3,
+    CancelResidency = 4,
+    ResidencyExtension = 5
+}
 
 export enum StatusType {
     	Approved=1,
@@ -25,5 +32,4 @@ export enum  ErrorMessages {
     required="برجاء ادخال هدا الحقل",
      Select="برجاء الاختيار",
     MaxWidth="المساحة القسوى المسموح بها 1 ميجا بيت",
-
 }

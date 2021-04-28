@@ -1,6 +1,6 @@
-export interface IResponse {
+export interface IResponse<T=object> {
     status?:number,
     message?:string,
-    response?:any,
+    response?:T,
     hasError?:boolean
 };

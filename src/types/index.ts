@@ -3,6 +3,7 @@ import {IPassportInfo} from "./passportInfo";
 import {IUserProfile} from "./userProfile";
 import {IChangePassword} from "./changePassword";
 import {IResponse} from "./response";
+import {IApplicationType} from "./applicationType";
 
 import {IFileAttachment,IAttachment} from "./attachmentDocuments"
 
@@ -13,5 +14,6 @@ export type {
     IUserProfile,
     IAttachment,
     IChangePassword,
-    IResponse
+    IResponse,
+    IApplicationType
 };

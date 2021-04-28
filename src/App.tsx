@@ -24,6 +24,7 @@ import InwardApplication from "./UI/views/Admin/InwardApplication";
 import NewAppAdmin   from "./UI/views/Admin/NewApp";
 import PersonalInfoAdmin from "./UI/views/Admin/PersonalInfo";
 import PassportInfoAdmin from "./UI/views/Admin/PassportInfo";
+import AppTypesSettings from "./UI/views/Admin/AppTypesSettings";
 
 
 
@@ -58,6 +59,7 @@ function App() {
 						<ProtectedRoute exact path="/admin/passportInfo" component={PassportInfoAdmin} />
 						<ProtectedRoute exact path="/admin/newApp" component={NewAppAdmin} />
 						<ProtectedRoute exact path="/admin/InwardApplication" component={InwardApplication} />
+						<ProtectedRoute exact path="/admin/appTypesSettings" component={AppTypesSettings} />
 
 						{/* <Route exact path="/notfound" component={NotFound} />
 						<Redirect to="/notfound" /> */}
